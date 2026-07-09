@@ -266,9 +266,65 @@
 
   footer{max-width:1180px;margin:20px auto 40px;padding:0 22px;color:var(--ink-soft);font-size:.85rem;text-align:center}
 
+  /* ---------- ENERGY BADGE ---------- */
+  .tag.energy{background:rgba(0,206,201,.16);color:#0a8f8b}
+  html[data-theme="dark"] .tag.energy{color:#4fe9e4}
+
+  /* ---------- FULLSCREEN TIMER ---------- */
+  .timer-screen{
+    position:fixed;inset:0;z-index:120;display:none;flex-direction:column;
+    align-items:center;justify-content:center;color:#fff;text-align:center;
+    background:radial-gradient(1200px 600px at 50% 0%,#5b4bd6,#2a2352 70%,#161232);
+    transition:background .4s;
+  }
+  .timer-screen.open{display:flex}
+  .timer-screen.warn{background:radial-gradient(1200px 600px at 50% 0%,#e17055,#7a2f22 70%,#3a1712)}
+  .timer-screen.done{background:radial-gradient(1200px 600px at 50% 0%,#00b894,#0a5c48 70%,#04281f);animation:flash .6s ease 6}
+  @keyframes flash{50%{filter:brightness(1.6)}}
+  .timer-label{font-size:1.4rem;opacity:.85;margin-bottom:6px;min-height:1.6em;font-weight:600;padding:0 20px}
+  .timer-display{font-size:min(30vw,240px);font-weight:800;line-height:1;letter-spacing:2px;font-variant-numeric:tabular-nums}
+  .timer-presets{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:26px 0 8px;max-width:560px}
+  .tp{border:none;background:rgba(255,255,255,.16);color:#fff;padding:12px 18px;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;transition:.15s}
+  .tp:hover{background:rgba(255,255,255,.3)}
+  .timer-controls{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:20px}
+  .tc{border:none;border-radius:14px;padding:15px 26px;font-size:1.1rem;font-weight:800;cursor:pointer;background:#fff;color:var(--brand);transition:.15s}
+  .tc.sec{background:rgba(255,255,255,.18);color:#fff}
+  .tc:hover{transform:translateY(-2px)}
+  .timer-close{position:absolute;top:20px;right:22px;background:rgba(255,255,255,.18);border:none;color:#fff;width:46px;height:46px;border-radius:12px;font-size:1.3rem;cursor:pointer}
+  .timer-custom{margin-top:14px;display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;opacity:.9}
+  .timer-custom input{width:80px;border:none;border-radius:10px;padding:10px;text-align:center;font-size:1rem;font-weight:700}
+
+  /* ---------- PICKER (losowanie) ---------- */
+  .picker-result{
+    min-height:120px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;
+    padding:18px;background:var(--bg);border-radius:14px;margin-top:14px;border:1px dashed var(--line);
+  }
+  .picked-name{
+    font-size:2rem;font-weight:800;color:var(--brand);animation:pop .3s ease;
+  }
+  .group-card{
+    background:var(--bg-soft);border:1px solid var(--line);border-radius:12px;padding:12px 14px;
+    min-width:150px;text-align:left;box-shadow:var(--shadow-sm);animation:pop .3s ease;
+  }
+  .group-card h5{margin:0 0 6px;color:var(--brand);font-size:.95rem}
+  .group-card ul{margin:0;padding-left:18px}
+  .group-card li{margin:2px 0}
+  .seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .seg button{border:none;background:transparent;color:var(--ink-soft);padding:8px 14px;font-weight:700;cursor:pointer}
+  .seg button.on{background:var(--brand);color:#fff}
+
+  /* ---------- NOTES + CUSTOM TAGS ---------- */
+  .note-box{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:10px 12px;font-family:inherit;font-size:.92rem;min-height:60px;resize:vertical}
+  .mytag{display:inline-flex;align-items:center;gap:6px;background:rgba(253,121,168,.16);color:#c93f77;font-size:.78rem;font-weight:700;padding:5px 10px;border-radius:8px}
+  html[data-theme="dark"] .mytag{color:#ff9ac2}
+  .mytag button{border:none;background:transparent;color:inherit;cursor:pointer;font-size:.9rem;padding:0;line-height:1}
+  .tag-input{display:flex;gap:8px;margin-top:8px}
+  .tag-input input{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:8px 10px}
+
   @media(max-width:640px){
     .form-grid{grid-template-columns:1fr}
     .logo h1{font-size:1.25rem}
+    .timer-display{font-size:34vw}
   }
 </style>
 </head>
@@ -286,6 +342,8 @@
         </div>
       </div>
       <div class="hero-actions">
+        <button class="icon-btn" id="timerBtn">⏱️ Timer</button>
+        <button class="icon-btn" id="pickerBtn">🎯 Losowanie</button>
         <button class="icon-btn" id="randomBtn">🎰 Wylosuj</button>
         <button class="icon-btn" id="addBtn">➕ Dodaj zabawę</button>
         <button class="icon-btn" id="ioBtn">💾 Kopia</button>
@@ -316,6 +374,12 @@
       <select id="levelFilter" data-role="level"><option value="">Poziom: wszystkie</option></select>
       <select id="ageFilter" data-role="age"><option value="">Wiek: każdy</option></select>
       <select id="skillFilter" data-role="skill"><option value="">Umiejętność: dowolna</option></select>
+      <select id="energyFilter" data-role="energy">
+        <option value="">Energia: dowolna</option>
+        <option value="1">🔈 Spokojna</option>
+        <option value="2">🔉 Średnia</option>
+        <option value="3">🔊 Energiczna</option>
+      </select>
       <select id="sortBy">
         <option value="az">Sortuj: A–Z</option>
         <option value="za">Sortuj: Z–A</option>
@@ -390,6 +454,14 @@
           <label class="fld">Czas (min)</label>
           <input class="txt" id="f_time" type="number" placeholder="10" />
         </div>
+        <div>
+          <label class="fld">Poziom energii / hałasu</label>
+          <select class="txt" id="f_energy">
+            <option value="1">🔈 Spokojna / cicha</option>
+            <option value="2" selected>🔉 Średnia</option>
+            <option value="3">🔊 Energiczna / głośna</option>
+          </select>
+        </div>
         <div class="full">
           <label class="fld">Materiały (po przecinku)</label>
           <input class="txt" id="f_materials" placeholder="Flashcards" />
@@ -462,6 +534,73 @@
   </div>
 </div>
 
+<!-- ===================== FULLSCREEN TIMER ===================== -->
+<div class="timer-screen" id="timerScreen">
+  <button class="timer-close" id="timerClose">✕</button>
+  <div class="timer-label" id="timerLabel">Ustaw czas aktywności</div>
+  <div class="timer-display" id="timerDisplay">00:00</div>
+  <div class="timer-presets" id="timerPresets">
+    <button class="tp" data-min="1">1 min</button>
+    <button class="tp" data-min="2">2 min</button>
+    <button class="tp" data-min="3">3 min</button>
+    <button class="tp" data-min="5">5 min</button>
+    <button class="tp" data-min="10">10 min</button>
+    <button class="tp" data-min="15">15 min</button>
+  </div>
+  <div class="timer-custom">
+    <span>lub własny czas:</span>
+    <input type="number" id="timerCustomMin" min="0" placeholder="min" />
+    <input type="number" id="timerCustomSec" min="0" max="59" placeholder="sek" />
+    <button class="tp" id="timerCustomSet">Ustaw</button>
+  </div>
+  <div class="timer-controls">
+    <button class="tc" id="timerStart">▶ Start</button>
+    <button class="tc sec" id="timerReset">↺ Reset</button>
+    <button class="tc sec" id="timerStopwatch">⏱ Stoper</button>
+  </div>
+</div>
+
+<!-- ===================== MODAL: LOSOWANIE ===================== -->
+<div class="modal-overlay" id="pickerOverlay">
+  <div class="modal">
+    <div class="modal-head" style="background:linear-gradient(135deg,#0984e3,#0652a0)">
+      <button class="close-x" data-close="picker">✕</button>
+      <div class="m-emoji">🎯</div>
+      <h2>Losowanie uczniów i grup</h2>
+    </div>
+    <div class="modal-content">
+      <label class="fld">Lista klasy (każde imię w nowej linii)</label>
+      <textarea class="note-box" id="pickerNames" style="min-height:120px" placeholder="Ania&#10;Bartek&#10;Celina&#10;Darek…"></textarea>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px">
+        <div class="seg" id="pickerMode">
+          <button data-mode="single" class="on">🎲 Wylosuj osobę</button>
+          <button data-mode="groups">👥 Podziel na grupy</button>
+        </div>
+        <label id="groupOptWrap" style="display:none;align-items:center;gap:8px;font-weight:700;color:var(--ink-soft)">
+          <select class="mini-select" id="groupBy">
+            <option value="count">Liczba grup</option>
+            <option value="size">Osób w grupie</option>
+          </select>
+          <input class="txt" id="groupN" type="number" min="2" value="2" style="width:70px" />
+        </label>
+      </div>
+      <div class="picker-result" id="pickerResult">
+        <span style="color:var(--ink-soft)">Wpisz listę i kliknij „Losuj”.</span>
+      </div>
+      <div class="modal-foot">
+        <button class="btn primary" id="pickerGo">🎲 Losuj</button>
+        <button class="btn ghost" id="pickerReset">Wyczyść wyróżnienia</button>
+        <span class="hint" style="align-self:center">Lista zapisuje się w przeglądarce.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL: UDOSTĘPNIONA ZABAWA ===================== -->
+<div class="modal-overlay" id="sharedOverlay">
+  <div class="modal" id="sharedModal"></div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -490,6 +629,7 @@ const SEED = [
     ages:["Dzieci"],
     skills:["Słownictwo","Pamięć"],
     time:8,
+    energy:1,
     materials:["Flashcards"],
     steps:[
       "Rozłóż flashcards na dywanie (lub przyczep na tablicy) tak, aby wszystkie dzieci je widziały. Nazwijcie wspólnie każdy obrazek.",
@@ -511,6 +651,7 @@ const SEED = [
     ages:["Dzieci","Nastolatki"],
     skills:["Słownictwo","Mówienie"],
     time:10,
+    energy:3,
     materials:["Piłka / maskotka","Muzyka"],
     steps:[
       "Uczniowie siedzą w kręgu. Włącz muzykę — dzieci podają sobie „gorący ziemniak” (piłkę).",
@@ -530,6 +671,7 @@ const SEED = [
     ages:["Nastolatki","Dorośli"],
     skills:["Czytanie","Pisanie","Współpraca"],
     time:15,
+    energy:3,
     materials:["Wydrukowany tekst"],
     steps:[
       "Powieś krótki tekst na ścianie po drugiej stronie sali.",
@@ -549,6 +691,7 @@ const SEED = [
     ages:["Dzieci","Nastolatki"],
     skills:["Słownictwo","Ortografia"],
     time:8,
+    energy:3,
     materials:["Tablica","Pisaki"],
     steps:[
       "Podziel klasę na 2 drużyny i tablicę na 2 części.",
@@ -568,6 +711,7 @@ const SEED = [
     ages:["Nastolatki","Dorośli"],
     skills:["Mówienie","Gramatyka"],
     time:10,
+    energy:2,
     materials:[],
     steps:[
       "Jedna osoba myśli o przedmiocie, zwierzęciu lub osobie.",
@@ -588,6 +732,7 @@ const SEED = [
     ages:["Nastolatki","Dorośli"],
     skills:["Mówienie","Słownictwo","Definiowanie"],
     time:12,
+    energy:2,
     materials:["Tablica"],
     steps:[
       "Jeden uczeń siada tyłem do tablicy.",
@@ -607,7 +752,9 @@ const LS = {
   custom:"ltt_custom",
   plan:"ltt_plan",
   theme:"ltt_theme",
-  removed:"ltt_removed"
+  removed:"ltt_removed",
+  notes:"ltt_notes",     // {id:{note:"", tags:[]}}
+  roster:"ltt_roster"    // lista klasy (losowanie)
 };
 const load = (k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}};
 const save = (k,v)=>localStorage.setItem(k,JSON.stringify(v));
@@ -616,12 +763,16 @@ let favorites = load(LS.fav,[]);
 let custom    = load(LS.custom,[]);
 let plan      = load(LS.plan,[]);
 let removed   = load(LS.removed,[]); // ukryte seedy
+let notes     = load(LS.notes,{});   // notatki i własne tagi
 
 let activeCat = "all";
 let activeView = "all";
 
 const $ = s=>document.querySelector(s);
 const $$ = s=>[...document.querySelectorAll(s)];
+
+const ENERGY = {1:{icon:"🔈",label:"Spokojna"},2:{icon:"🔉",label:"Średnia"},3:{icon:"🔊",label:"Energiczna"}};
+const noteFor = id => notes[id] || {note:"",tags:[]};
 
 function allActivities(){
   const seeds = SEED.filter(s=>!removed.includes(s.id));
@@ -671,6 +822,7 @@ function render(){
   const fLevel = $('[data-role="level"]').value;
   const fAge   = $('[data-role="age"]').value;
   const fSkill = $('[data-role="skill"]').value;
+  const fEnergy= $('[data-role="energy"]').value;
   const sort   = $("#sortBy").value;
 
   let list = allActivities().filter(a=>{
@@ -679,8 +831,10 @@ function render(){
     if(fLevel && !(a.levels||[]).includes(fLevel)) return false;
     if(fAge && !(a.ages||[]).includes(fAge)) return false;
     if(fSkill && !(a.skills||[]).includes(fSkill)) return false;
+    if(fEnergy && String(a.energy||2)!==fEnergy) return false;
     if(q){
-      const hay=[a.title,a.excerpt,(a.skills||[]).join(" "),(a.levels||[]).join(" "),(a.materials||[]).join(" "),(a.steps||[]).join(" ")].join(" ").toLowerCase();
+      const n=noteFor(a.id);
+      const hay=[a.title,a.excerpt,(a.skills||[]).join(" "),(a.levels||[]).join(" "),(a.materials||[]).join(" "),(a.steps||[]).join(" "),n.note,(n.tags||[]).join(" ")].join(" ").toLowerCase();
       if(!hay.includes(q)) return false;
     }
     return true;
@@ -696,6 +850,8 @@ function render(){
   grid.innerHTML = list.map(a=>{
     const c=catById(a.category);
     const fav=favorites.includes(a.id);
+    const en=ENERGY[a.energy]||null;
+    const myTags=noteFor(a.id).tags||[];
     return `<article class="card" data-id="${a.id}">
       <div class="card-top">
         <div class="card-emoji">${a.emoji||c.emoji}</div>
@@ -708,7 +864,9 @@ function render(){
           ${(a.levels||[]).slice(0,3).map(l=>`<span class="tag lvl">${l}</span>`).join("")}
           ${a.time?`<span class="tag time">⏱ ${a.time} min</span>`:""}
           ${(a.ages||[]).slice(0,1).map(g=>`<span class="tag age">${g}</span>`).join("")}
+          ${en?`<span class="tag energy" title="${en.label}">${en.icon}</span>`:""}
         </div>
+        ${myTags.length?`<div class="meta-row">${myTags.slice(0,3).map(t=>`<span class="mytag">🏷️ ${t}</span>`).join("")}</div>`:""}
       </div>
       <div class="card-foot">
         <span class="cat-dot"><span class="dot" style="background:${c.color}"></span>${c.name}</span>
@@ -770,6 +928,7 @@ function openDetail(id){
         ${(a.levels||[]).map(l=>`<span class="tag">${l}</span>`).join("")}
         ${a.time?`<span class="tag">⏱ ${a.time} min</span>`:""}
         ${(a.ages||[]).map(g=>`<span class="tag">${g}</span>`).join("")}
+        ${ENERGY[a.energy]?`<span class="tag">${ENERGY[a.energy].icon} ${ENERGY[a.energy].label}</span>`:""}
       </div>
     </div>
     <div class="modal-content">
@@ -779,9 +938,20 @@ function openDetail(id){
       ${(a.steps&&a.steps.length)?`<h4>Jak przeprowadzić</h4><ol class="steps">${a.steps.map(s=>`<li>${s}</li>`).join("")}</ol>`:""}
       ${a.phrase?`<h4>Zwroty dla nauczyciela</h4><div class="phrase">💬 ${a.phrase}</div>`:""}
       ${a.tip?`<h4>Wskazówka / warianty</h4><div class="callout">💡 ${a.tip}</div>`:""}
+
+      <h4>🏷️ Moje tagi i notatka</h4>
+      <div class="meta-row" id="myTagList"></div>
+      <div class="tag-input">
+        <input id="newTag" placeholder="np. sprawdzone w kl. 4b, na deszczowy dzień" />
+        <button class="btn ghost" id="addTagBtn">+ Tag</button>
+      </div>
+      <textarea class="note-box" id="myNote" style="margin-top:10px" placeholder="Twoja prywatna notatka do tej zabawy…"></textarea>
+
       <div class="modal-foot">
-        <button class="btn primary" data-plan-modal="${a.id}">${plan.includes(a.id)?'✓ W planie lekcji':'📋 Dodaj do planu'}</button>
-        <button class="btn ghost" data-fav-modal="${a.id}">${favorites.includes(a.id)?'⭐ W ulubionych':'☆ Do ulubionych'}</button>
+        ${a.time?`<button class="btn primary" data-timer="${a.time}">⏱️ Timer ${a.time} min</button>`:`<button class="btn primary" data-timer="5">⏱️ Timer</button>`}
+        <button class="btn ghost" data-plan-modal="${a.id}">${plan.includes(a.id)?'✓ W planie':'📋 Do planu'}</button>
+        <button class="btn ghost" data-fav-modal="${a.id}">${favorites.includes(a.id)?'⭐ W ulubionych':'☆ Ulubione'}</button>
+        <button class="btn ghost" data-share="${a.id}">🔗 Udostępnij</button>
         <button class="btn ghost" data-dup="${a.id}">📄 Duplikuj</button>
         ${isCustom?`<button class="btn ghost" data-edit="${a.id}">✏️ Edytuj</button>
         <button class="btn ghost" style="color:var(--brand-3)" data-del="${a.id}">🗑️ Usuń</button>`:
@@ -789,6 +959,15 @@ function openDetail(id){
       </div>
     </div>`;
   openOverlay("detail");
+  // --- notatki / tagi ---
+  renderMyTags(a.id);
+  $("#myNote").value=noteFor(a.id).note||"";
+  $("#myNote").onblur=()=>{const n=noteFor(a.id);n.note=$("#myNote").value.trim();notes[a.id]=n;save(LS.notes,notes)};
+  $("#addTagBtn").onclick=()=>addTag(a.id);
+  $("#newTag").onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();addTag(a.id)}};
+  // --- timer / share ---
+  $("[data-timer]").onclick=()=>{closeOverlay("detail");openTimer(parseInt($("[data-timer]").dataset.timer)||5,a.title)};
+  $("[data-share]").onclick=()=>shareActivity(a.id);
   $("[data-plan-modal]").onclick=()=>{togglePlan(a.id);openDetail(a.id)};
   $("[data-fav-modal]").onclick=()=>{toggleFav(a.id);openDetail(a.id)};
   $("[data-dup]").onclick=()=>{
@@ -802,6 +981,7 @@ function openDetail(id){
     $("#f_ages").value=(a.ages||[]).join(", ");
     $("#f_skills").value=(a.skills||[]).join(", ");
     $("#f_time").value=a.time||"";
+    $("#f_energy").value=a.energy||2;
     $("#f_materials").value=(a.materials||[]).join(", ");
     $("#f_steps").value=(a.steps||[]).join("\n");
     $("#f_phrase").value=a.phrase||"";
@@ -833,6 +1013,7 @@ function openForm(id){
   $("#f_ages").value=(a.ages||[]).join(", ");
   $("#f_skills").value=(a.skills||[]).join(", ");
   $("#f_time").value=a.time||"";
+  $("#f_energy").value=a.energy||2;
   $("#f_materials").value=(a.materials||[]).join(", ");
   $("#f_steps").value=(a.steps||[]).join("\n");
   $("#f_phrase").value=a.phrase||"";
@@ -853,6 +1034,7 @@ function saveActivity(){
     ages:splitList($("#f_ages").value),
     skills:splitList($("#f_skills").value),
     time:parseInt($("#f_time").value)||null,
+    energy:parseInt($("#f_energy").value)||2,
     materials:splitList($("#f_materials").value),
     steps:$("#f_steps").value.split("\n").map(x=>x.trim()).filter(Boolean),
     phrase:$("#f_phrase").value.trim(),
@@ -863,6 +1045,146 @@ function saveActivity(){
   save(LS.custom,custom);
   closeOverlay("form");refresh();
   toast(editingId?"✅ Zaktualizowano":"✅ Dodano nową zabawę");
+}
+
+/* ============================================================
+   NOTATKI I WŁASNE TAGI
+   ============================================================ */
+function renderMyTags(id){
+  const wrap=$("#myTagList");if(!wrap)return;
+  const tags=noteFor(id).tags||[];
+  wrap.innerHTML=tags.length?tags.map(t=>`<span class="mytag">🏷️ ${t}<button data-rmtag="${t}">✕</button></span>`).join(""):`<span style="color:var(--ink-soft);font-size:.85rem">Brak tagów.</span>`;
+  $$("[data-rmtag]").forEach(b=>b.onclick=()=>{
+    const n=noteFor(id);n.tags=(n.tags||[]).filter(x=>x!==b.dataset.rmtag);notes[id]=n;save(LS.notes,notes);renderMyTags(id);render();
+  });
+}
+function addTag(id){
+  const val=$("#newTag").value.trim();if(!val)return;
+  const n=noteFor(id);n.tags=n.tags||[];
+  val.split(",").map(x=>x.trim()).filter(Boolean).forEach(t=>{if(!n.tags.includes(t))n.tags.push(t)});
+  notes[id]=n;save(LS.notes,notes);$("#newTag").value="";renderMyTags(id);render();
+}
+
+/* ============================================================
+   TIMER / STOPER PEŁNOEKRANOWY
+   ============================================================ */
+let tState={sec:0,total:0,running:false,mode:"down",int:null};
+function fmt(s){const m=Math.floor(Math.abs(s)/60),ss=Math.abs(s)%60;return (s<0?"-":"")+String(m).padStart(2,"0")+":"+String(ss).padStart(2,"0")}
+function tRender(){
+  $("#timerDisplay").textContent=fmt(tState.sec);
+  const scr=$("#timerScreen");scr.classList.remove("warn","done");
+  if(tState.mode==="down"){
+    if(tState.sec<=0){scr.classList.add("done")}
+    else if(tState.sec<=10){scr.classList.add("warn")}
+  }
+}
+function tTick(){
+  if(!tState.running)return;
+  if(tState.mode==="down"){
+    tState.sec--;
+    if(tState.sec<=0){tState.sec=0;tRender();tStop();beep();$("#timerLabel").textContent="⏰ Czas minął!";return}
+  }else{tState.sec++}
+  tRender();
+}
+function tStart(){if(tState.running)return;if(tState.mode==="down"&&tState.sec<=0)return;tState.running=true;$("#timerStart").textContent="⏸ Pauza";tState.int=setInterval(tTick,1000)}
+function tStop(){tState.running=false;$("#timerStart").textContent="▶ Start";clearInterval(tState.int)}
+function tSet(totalSec,label){tStop();tState.mode="down";tState.total=totalSec;tState.sec=totalSec;$("#timerLabel").textContent=label||"Odliczanie";tRender()}
+function openTimer(min,label){
+  $("#timerScreen").classList.add("open");
+  tSet((parseInt(min)||5)*60, label?("⏱️ "+label):"Odliczanie");
+  tStart();
+}
+function beep(){
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    [0,0.25,0.5].forEach(t=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);o.type="sine";o.frequency.value=880;
+      g.gain.setValueAtTime(0.001,ctx.currentTime+t);
+      g.gain.exponentialRampToValueAtTime(0.3,ctx.currentTime+t+0.02);
+      g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+t+0.2);
+      o.start(ctx.currentTime+t);o.stop(ctx.currentTime+t+0.22);
+    });
+  }catch{}
+}
+
+/* ============================================================
+   LOSOWANIE UCZNIÓW / GRUP
+   ============================================================ */
+let pickMode="single";
+function parseRoster(){return $("#pickerNames").value.split("\n").map(x=>x.trim()).filter(Boolean)}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function pickerGo(){
+  const names=parseRoster();
+  save(LS.roster,$("#pickerNames").value);
+  const res=$("#pickerResult");
+  if(names.length<1){res.innerHTML=`<span style="color:var(--brand-3)">Wpisz najpierw imiona uczniów.</span>`;return}
+  if(pickMode==="single"){
+    const pick=names[Math.floor(Math.random()*names.length)];
+    // mini animacja losowania
+    let ticks=0;res.innerHTML=`<span class="picked-name">…</span>`;
+    const el=res.querySelector(".picked-name");
+    const spin=setInterval(()=>{el.textContent=names[Math.floor(Math.random()*names.length)];if(++ticks>12){clearInterval(spin);el.textContent="🎉 "+pick}},70);
+  }else{
+    const n=Math.max(2,parseInt($("#groupN").value)||2);
+    const by=$("#groupBy").value;
+    const sh=shuffle(names);
+    let groups=[];
+    if(by==="count"){groups=Array.from({length:Math.min(n,sh.length)},()=>[]);sh.forEach((name,i)=>groups[i%groups.length].push(name));}
+    else{for(let i=0;i<sh.length;i+=n)groups.push(sh.slice(i,i+n));}
+    res.innerHTML=groups.map((g,i)=>`<div class="group-card"><h5>Grupa ${i+1} (${g.length})</h5><ul>${g.map(x=>`<li>${x}</li>`).join("")}</ul></div>`).join("");
+  }
+}
+
+/* ============================================================
+   UDOSTĘPNIANIE ZABAWY (link)
+   ============================================================ */
+function encodeActivity(a){
+  const slim={emoji:a.emoji,title:a.title,category:a.category,excerpt:a.excerpt,levels:a.levels,ages:a.ages,skills:a.skills,time:a.time,energy:a.energy,materials:a.materials,steps:a.steps,phrase:a.phrase,tip:a.tip};
+  return encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(slim)))));
+}
+function decodeActivity(str){
+  try{return JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(str)))))}catch{return null}
+}
+function shareActivity(id){
+  const a=findActivity(id);if(!a)return;
+  const base=location.href.split("#")[0];
+  const link=base+"#share="+encodeActivity(a);
+  const done=ok=>toast(ok?"🔗 Link skopiowany do schowka":"Skopiuj link ręcznie z okna");
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(link).then(()=>done(true)).catch(()=>promptLink(link));
+  }else promptLink(link);
+}
+function promptLink(link){prompt("Skopiuj link do zabawy (Ctrl+C):",link)}
+function openSharedFromHash(){
+  const m=location.hash.match(/share=(.+)$/);
+  if(!m)return;
+  const a=decodeActivity(m[1]);
+  history.replaceState(null,"",location.pathname+location.search);
+  if(!a||!a.title){toast("❌ Nieprawidłowy link do zabawy");return}
+  const c=catById(a.category);
+  $("#sharedModal").innerHTML=`
+    <div class="modal-head" style="background:linear-gradient(135deg,${c.color},${c.color}cc)">
+      <button class="close-x" data-close="shared">✕</button>
+      <div class="m-emoji">${a.emoji||c.emoji}</div>
+      <h2>${a.title}</h2>
+      <div class="m-meta"><span class="tag">📩 Udostępniona zabawa</span><span class="tag">${c.emoji} ${c.name}</span>${a.time?`<span class="tag">⏱ ${a.time} min</span>`:""}</div>
+    </div>
+    <div class="modal-content">
+      ${a.excerpt?`<p style="color:var(--ink-soft)">${a.excerpt}</p>`:""}
+      ${(a.steps&&a.steps.length)?`<h4>Jak przeprowadzić</h4><ol class="steps">${a.steps.map(s=>`<li>${s}</li>`).join("")}</ol>`:""}
+      ${a.phrase?`<div class="phrase">💬 ${a.phrase}</div>`:""}
+      ${a.tip?`<div class="callout" style="margin-top:10px">💡 ${a.tip}</div>`:""}
+      <div class="modal-foot">
+        <button class="btn primary" id="importShared">➕ Dodaj do moich zabaw</button>
+        <button class="btn ghost" data-close="shared">Zamknij</button>
+      </div>
+    </div>`;
+  openOverlay("shared");
+  $("#importShared").onclick=()=>{
+    a.id="c-shared-"+Date.now();custom.push(a);save(LS.custom,custom);
+    closeOverlay("shared");refresh();toast("✅ Dodano do Twoich zabaw");
+  };
 }
 
 /* ============================================================
@@ -940,6 +1262,27 @@ $("#themeBtn").onclick=()=>{
   $("#themeBtn").textContent=cur==="dark"?"☀️":"🌙";
 };
 
+/* Timer */
+$("#timerBtn").onclick=()=>{$("#timerScreen").classList.add("open");if(tState.total===0){tState.mode="down";tState.sec=0;$("#timerLabel").textContent="Ustaw czas aktywności";tRender()}};
+$("#timerClose").onclick=()=>{tStop();$("#timerScreen").classList.remove("open")};
+$$("#timerPresets .tp").forEach(b=>b.onclick=()=>{tSet(parseInt(b.dataset.min)*60,"Odliczanie");tStart()});
+$("#timerCustomSet").onclick=()=>{
+  const m=parseInt($("#timerCustomMin").value)||0,s=parseInt($("#timerCustomSec").value)||0;
+  if(m+s<=0){toast("Podaj czas");return}tSet(m*60+s,"Odliczanie");tStart();
+};
+$("#timerStart").onclick=()=>{tState.running?tStop():tStart()};
+$("#timerReset").onclick=()=>{tStop();if(tState.mode==="down"){tState.sec=tState.total;$("#timerLabel").textContent="Odliczanie"}else{tState.sec=0}tRender()};
+$("#timerStopwatch").onclick=()=>{tStop();tState.mode="up";tState.sec=0;tState.total=0;$("#timerLabel").textContent="⏱ Stoper";tRender();tStart()};
+
+/* Losowanie */
+$("#pickerBtn").onclick=()=>{$("#pickerNames").value=load(LS.roster,"");openOverlay("picker")};
+$$("#pickerMode button").forEach(b=>b.onclick=()=>{
+  $$("#pickerMode button").forEach(x=>x.classList.remove("on"));b.classList.add("on");
+  pickMode=b.dataset.mode;$("#groupOptWrap").style.display=pickMode==="groups"?"flex":"none";
+});
+$("#pickerGo").onclick=pickerGo;
+$("#pickerReset").onclick=()=>$("#pickerResult").innerHTML=`<span style="color:var(--ink-soft)">Wpisz listę i kliknij „Losuj”.</span>`;
+
 /* Plan drawer */
 $("#planFab").onclick=()=>{$("#planDrawer").classList.add("open");renderPlan()};
 $("#closeDrawer").onclick=()=>$("#planDrawer").classList.remove("open");
@@ -973,20 +1316,21 @@ function mergeGames(incoming){
 
 /* --- pełna kopia --- */
 $("#exportBtn").onclick=()=>{
-  downloadJSON({type:"ltt-backup",favorites,custom,plan,removed,exportedAt:new Date().toISOString()},"teacher-toolbox-kopia.json");
+  downloadJSON({type:"ltt-backup",favorites,custom,plan,removed,notes,exportedAt:new Date().toISOString()},"teacher-toolbox-kopia.json");
   toast("💾 Pobrano pełną kopię");
 };
 $("#importFile").onchange=e=>readJSONFile(e.target,d=>{
   const games=d.custom||d.games||[];
   const replace=confirm("Kliknij OK, aby ZASTĄPIĆ obecne dane wczytanymi.\nKliknij Anuluj, aby SCALIĆ (zachować obecne i dodać nowe).");
   if(replace){
-    favorites=d.favorites||[];custom=games;plan=d.plan||[];removed=d.removed||[];
-    save(LS.fav,favorites);save(LS.custom,custom);save(LS.plan,plan);save(LS.removed,removed);
+    favorites=d.favorites||[];custom=games;plan=d.plan||[];removed=d.removed||[];notes=d.notes||{};
+    save(LS.fav,favorites);save(LS.custom,custom);save(LS.plan,plan);save(LS.removed,removed);save(LS.notes,notes);
     toast("✅ Zastąpiono dane kopią");
   }else{
     const n=mergeGames(games);
     (d.favorites||[]).forEach(x=>{if(!favorites.includes(x))favorites.push(x)});
-    save(LS.custom,custom);save(LS.fav,favorites);
+    Object.assign(notes,d.notes||{});
+    save(LS.custom,custom);save(LS.fav,favorites);save(LS.notes,notes);
     toast(`✅ Scalono — dodano ${n} zabaw`);
   }
   closeOverlay("io");refresh();
@@ -1006,16 +1350,20 @@ $("#importGamesFile").onchange=e=>readJSONFile(e.target,d=>{
   toast(`📥 Dodano ${n} zabaw`);
 });
 $("#resetBtn").onclick=()=>{
-  if(confirm("Przywrócić ustawienia domyślne? Usunie to Twoje ulubione, plan i własne zabawy.")){
-    favorites=[];custom=[];plan=[];removed=[];
-    [LS.fav,LS.custom,LS.plan,LS.removed].forEach(k=>localStorage.removeItem(k));
+  if(confirm("Przywrócić ustawienia domyślne? Usunie to Twoje ulubione, plan, notatki i własne zabawy.")){
+    favorites=[];custom=[];plan=[];removed=[];notes={};
+    [LS.fav,LS.custom,LS.plan,LS.removed,LS.notes,LS.roster].forEach(k=>localStorage.removeItem(k));
     closeOverlay("io");refresh();toast("Przywrócono domyślne");
   }
 };
 
 /* ESC zamyka */
 document.addEventListener("keydown",e=>{
-  if(e.key==="Escape"){$$(".modal-overlay").forEach(o=>o.classList.remove("open"));$("#planDrawer").classList.remove("open")}
+  if(e.key==="Escape"){
+    $$(".modal-overlay").forEach(o=>o.classList.remove("open"));
+    $("#planDrawer").classList.remove("open");
+    if($("#timerScreen").classList.contains("open")){tStop();$("#timerScreen").classList.remove("open")}
+  }
 });
 
 /* INIT */
@@ -1024,6 +1372,7 @@ document.addEventListener("keydown",e=>{
   document.documentElement.setAttribute("data-theme",t);
   $("#themeBtn").textContent=t==="dark"?"☀️":"🌙";
   refresh();
+  openSharedFromHash(); // jeśli otwarto link do udostępnionej zabawy
 })();
 </script>
 </body>
