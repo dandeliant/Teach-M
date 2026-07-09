@@ -622,7 +622,7 @@ const SEED = [
   {
     id:"which-missing",
     emoji:"🫣",
-    title:"Which one is missing?",
+    title:"Which one is missing? (Którego brakuje?)",
     category:"vocab",
     excerpt:"Klasyczna zabawa z flashcards — dzieci odgadują, którego obrazka brakuje.",
     levels:["A1","A2"],
@@ -664,7 +664,7 @@ const SEED = [
   {
     id:"running-dictation",
     emoji:"🏃",
-    title:"Running Dictation",
+    title:"Running Dictation (Biegane dyktando)",
     category:"movement",
     excerpt:"Bieg + czytanie + pisanie + współpraca w jednym — świetne na energię.",
     levels:["A2","B1","B2"],
@@ -684,7 +684,7 @@ const SEED = [
   {
     id:"board-race",
     emoji:"🏁",
-    title:"Board Race",
+    title:"Board Race (Wyścig do tablicy)",
     category:"warmup",
     excerpt:"Dwie drużyny, jedna tablica — kto zapisze więcej poprawnych słów?",
     levels:["A1","A2","B1"],
@@ -704,7 +704,7 @@ const SEED = [
   {
     id:"20-questions",
     emoji:"❓",
-    title:"20 Questions",
+    title:"20 Questions (20 pytań)",
     category:"speaking",
     excerpt:"Zgadywanie przedmiotu/osoby przez pytania tak/nie — ćwiczy pytania i struktury.",
     levels:["A2","B1","B2"],
@@ -725,7 +725,7 @@ const SEED = [
   {
     id:"back-to-board",
     emoji:"🪑",
-    title:"Back to the Board",
+    title:"Back to the Board (Tyłem do tablicy)",
     category:"vocab",
     excerpt:"Uczeń tyłem do tablicy zgaduje słowo, które opisuje reszta klasy.",
     levels:["A2","B1","B2","C1"],
@@ -741,6 +741,784 @@ const SEED = [
       "Zmiana osoby na krześle."
     ],
     tip:"Świetne do powtórki słownictwa przed testem — używaj słów z ostatnich lekcji."
+  },
+
+  {
+    id:"guess-the-word",
+    emoji:"🔎",
+    title:"Guess the word (Zgadnij słowo)",
+    category:"vocab",
+    excerpt:"Dzieci rozpoznają obrazek widząc tylko jego mały wycinek przez dziurkę.",
+    levels:["A1","A2"],
+    ages:["Dzieci"],
+    skills:["Słownictwo","Spostrzegawczość"],
+    time:8,
+    energy:1,
+    materials:["Flashcards","Kartka z wyciętym kółkiem"],
+    steps:[
+      "Przygotuj kartkę wielkości flashcarda z małym okrągłym otworem pośrodku.",
+      "Potasuj karty obrazkowe i na wierzchnią połóż kartkę z dziurką, tak by widoczny był tylko skrawek obrazka.",
+      "Dzieci próbują odgadnąć, co przedstawia karta, patrząc jedynie przez otwór.",
+      "Po trafnej odpowiedzi odsłoń całą kartę i przejdź do kolejnej."
+    ],
+    tip:"Zrób kilka kartek z różnej wielkości otworami — im mniejszy, tym trudniej i ciekawiej."
+  },
+  {
+    id:"cup-tower",
+    emoji:"🥤",
+    title:"Budowanie wieży z kubeczków (Cup tower)",
+    category:"vocab",
+    excerpt:"Za każdą trafnie nazwaną kartę dokładacie kolejne piętro wieży z kubków.",
+    levels:["A1","A2"],
+    ages:["Dzieci"],
+    skills:["Słownictwo","Motoryka"],
+    time:10,
+    energy:2,
+    materials:["Flashcards","Plastikowe kubeczki"],
+    steps:[
+      "Pokaż dzieciom kartę obrazkową i poproś o nazwanie tego, co na niej widać.",
+      "Za poprawną odpowiedź dokładacie element wieży według wzoru: karta – kubek – karta – kubek…",
+      "Budujcie tak długo, aż wieża zacznie się chwiać — to najlepsza część zabawy.",
+      "Możecie liczyć piętra po angielsku i bić rekord grupy."
+    ],
+    tip:"Sprawdza się też jako nagroda zespołowa — każda grupa buduje własną wieżę."
+  },
+  {
+    id:"magic-eye",
+    emoji:"👁️",
+    title:"Magic eye (Magiczne oko)",
+    category:"vocab",
+    excerpt:"Odwracacie kolejne karty, a dzieci i tak nazywają je z pamięci.",
+    levels:["A1","A2"],
+    ages:["Dzieci"],
+    skills:["Słownictwo","Pamięć"],
+    time:8,
+    energy:1,
+    materials:["Flashcards"],
+    steps:[
+      "Rozłóż karty na dywanie i nazwijcie je wspólnie po kolei.",
+      "Odwróć jedną kartę obrazkiem do podłogi i ponownie przejdźcie przez wszystkie, łącznie z zakrytą.",
+      "Odwracaj kolejne karty — drugą, trzecią, czwartą — za każdym razem nazywając cały zestaw.",
+      "Na końcu wszystkie karty są zakryte, a dzieci recytują je z pamięci i są z siebie dumne."
+    ],
+    tip:"Świetne domknięcie serii z nowym słownictwem — pokazuje dzieciom, ile już zapamiętały."
+  },
+  {
+    id:"broken-telephone",
+    emoji:"📞",
+    title:"Głuchy telefon (Broken telephone)",
+    category:"listening",
+    excerpt:"Słowo wędruje szeptem przez całą drużynę aż do ostatniej osoby.",
+    levels:["A1","A2","B1"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Słuchanie","Wymowa"],
+    time:8,
+    energy:2,
+    materials:["Flashcards (opcjonalnie)"],
+    steps:[
+      "Podziel klasę na dwie drużyny ustawione w rzędach.",
+      "Pierwszej osobie w każdym rzędzie szepnij na ucho to samo słowo.",
+      "Słowo jest przekazywane szeptem od ucha do ucha aż do ostatniego dziecka.",
+      "Ostatnia osoba mówi słowo na głos i wskazuje pasujący obrazek. Trafnie? Punkt dla drużyny."
+    ],
+    tip:"Używaj słów, które łatwo pomylić dźwiękowo — dzieci uwielbiają zabawne przekręcenia."
+  },
+  {
+    id:"spider-flies",
+    emoji:"🕷️",
+    title:"Spider and flies (Pajączek i muszki)",
+    category:"movement",
+    excerpt:"Muszki latają po sali, a znieruchomiały pajączek wypatruje tych, którzy się poruszą.",
+    levels:["A1","A2"],
+    ages:["Dzieci"],
+    skills:["Słuchanie","Ruch"],
+    time:8,
+    energy:3,
+    materials:[],
+    steps:[
+      "Wybierz jedno dziecko na pajączka, reszta zostaje muszkami.",
+      "Pajączek woła „Flies are flying!” — muszki biegają swobodnie po sali.",
+      "Na okrzyk „Spider is coming!” wszyscy zastygają w bezruchu.",
+      "Pajączek wyłapuje tych, którzy się poruszyli — zostają jego pomocnikami."
+    ],
+    phrase:"Flies are flying! … Spider is coming!",
+    tip:"Świetne na rozładowanie energii i utrwalenie komend ruchowych."
+  },
+  {
+    id:"picture-bingo",
+    emoji:"🎱",
+    title:"Bingo obrazkowe (Picture bingo)",
+    category:"listening",
+    excerpt:"Zakrywacie obrazki na planszy, aż ktoś ułoży rządek i krzyknie „Bingo!”.",
+    levels:["A1","A2","B1"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Słuchanie","Słownictwo"],
+    time:12,
+    energy:2,
+    materials:["Plansze bingo","Puste kartoniki"],
+    steps:[
+      "Rozdaj plansze z obrazkami i zestaw pustych kartoników do zakrywania.",
+      "Nauczyciel lub uczeń wywołuje nazwy — kto ma dany obrazek, zakrywa go.",
+      "Trzy zakryte pola w rzędzie, kolumnie lub po skosie oznaczają okrzyk „Bingo!”.",
+      "Graj dalej, aż wszystkie pola zostaną zakryte, by każde dziecko miało swój moment triumfu."
+    ],
+    tip:"Zamiast obrazków możesz wywoływać definicje albo słowa w drugim języku."
+  },
+  {
+    id:"guess-the-picture",
+    emoji:"🖼️",
+    title:"Guess the picture (Zgadnij obrazek)",
+    category:"listening",
+    excerpt:"Reprezentanci grup wskazują obrazek pasujący do opisu nauczyciela.",
+    levels:["A1","A2","B1"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Słuchanie","Przymiotniki"],
+    time:10,
+    energy:2,
+    materials:["Zestaw obrazków na tablicy"],
+    steps:[
+      "Powieś na tablicy różne obrazki i poproś grupy o wyłonienie reprezentantów.",
+      "Opisuj konkretny przedmiot, np. „Show me a big green ball” albo „Show me a yellow blouse with a little flower”.",
+      "Reprezentanci jak najszybciej wskazują pasujący obrazek.",
+      "Punkt dla grupy za trafne wskazanie; wygrywa zespół z największą liczbą punktów."
+    ],
+    phrase:"Show me a big green ball. / Show me a yellow blouse with a little flower on it.",
+    tip:"Świetnie ćwiczy słuchanie ze zrozumieniem i przymiotniki (kolor, rozmiar, detal)."
+  },
+  {
+    id:"kims-game",
+    emoji:"🧠",
+    title:"Kim's game (Gra Kima)",
+    category:"vocab",
+    excerpt:"Dzieci zapamiętują przedmioty, a potem odgadują, co zniknęło lub się zmieniło.",
+    levels:["A1","A2","B1"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Słownictwo","Pamięć"],
+    time:10,
+    energy:1,
+    materials:["Kilka przedmiotów lub kart","Chusta do przykrycia"],
+    steps:[
+      "Rozłóż przedmioty i daj dzieciom chwilę na ich zapamiętanie.",
+      "Przykryj wszystko chustą i poproś, by przypomniały sobie, co było pod spodem.",
+      "Aby dodać rywalizacji, dyskretnie zabierz jeden przedmiot lub zamień ich kolejność.",
+      "Dzieci mówią, czego brakuje lub co się zmieniło."
+    ],
+    tip:"Zwiększaj liczbę przedmiotów wraz z poziomem grupy."
+  },
+  {
+    id:"mr-crocodile",
+    emoji:"🐊",
+    title:"Mr Crocodile (Pan Krokodyl)",
+    category:"movement",
+    excerpt:"Dzieci proszą krokodyla o zgodę na przejście przez „rzekę”, nazywając zwierzęta.",
+    levels:["A1","A2"],
+    ages:["Dzieci"],
+    skills:["Słownictwo","Mówienie","Ruch"],
+    time:10,
+    energy:3,
+    materials:["Flashcards ze zwierzętami"],
+    steps:[
+      "Dywan to rzeka, w której czai się Pan Krokodyl (nauczyciel). Dzieci stają na brzegu.",
+      "Pokaż obrazek zwierzęcia; dziecko nazywa je i pyta: „Mr Crocodile, can I go?”.",
+      "Gdy odpowiesz „Yes, you can.”, dziecko szybko przebiega na drugą stronę, zanim złapie je krokodyl.",
+      "Złapane dziecko może zostać kolejnym krokodylem."
+    ],
+    phrase:"Mr Crocodile, can I go? — Yes, you can!",
+    tip:"Zmieniaj kategorię kart (jedzenie, kolory, liczby), by ćwiczyć różne słownictwo."
+  },
+  {
+    id:"simon-says",
+    emoji:"🙌",
+    title:"Simon says (Simon mówi)",
+    category:"movement",
+    excerpt:"Wykonujemy komendę tylko wtedy, gdy poprzedza ją „Simon says…”.",
+    levels:["A1","A2","B1"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Słuchanie","Ruch","Czasowniki"],
+    time:8,
+    energy:3,
+    materials:[],
+    steps:[
+      "„Simon” staje w środku i wydaje komendy, jednocześnie je pokazując.",
+      "Uczniowie wykonują polecenie tylko wtedy, gdy zaczyna się od „Simon says…”.",
+      "Gdy komendy nie poprzedza ta fraza (albo gest jest inny niż słowa), należy pozostać w bezruchu.",
+      "Kto się pomyli, odpada lub zdobywa punkt karny; można też wybrać nowego Simona."
+    ],
+    phrase:"Simon says… touch your nose! (Touch your nose!)",
+    tip:"Celowo pokazuj coś innego niż mówisz — to wyłapuje tych, którzy patrzą zamiast słuchać."
+  },
+  {
+    id:"dice-game",
+    emoji:"🎲",
+    title:"Kostka do gry (Dice game)",
+    category:"vocab",
+    excerpt:"Dzieci rzucają kostką i nazywają po angielsku to, co wypadło.",
+    levels:["A1","A2"],
+    ages:["Dzieci"],
+    skills:["Słownictwo","Liczby"],
+    time:8,
+    energy:2,
+    materials:["Kostka z obrazkami lub liczbami"],
+    steps:[
+      "Przygotuj kostkę edukacyjną z kieszonkami albo wydrukuj gotowy szablon.",
+      "Na ściankach umieść liczby lub obrazki (zabawki, zwierzęta, jedzenie).",
+      "Dzieci siedzą w kole i po kolei rzucają kostką.",
+      "Po rzucie dziecko mówi po angielsku, co wypadło."
+    ],
+    tip:"Miej kilka kostek tematycznych i wymieniaj je zależnie od powtarzanego materiału."
+  },
+  {
+    id:"numbers-on-back",
+    emoji:"🔢",
+    title:"Rysowanie liczb na plecach (Numbers on the back)",
+    category:"movement",
+    excerpt:"Jedno dziecko „pisze” liczbę palcem na plecach kolegi, drugie zgaduje.",
+    levels:["A1","A2"],
+    ages:["Dzieci"],
+    skills:["Liczby","Współpraca"],
+    time:8,
+    energy:2,
+    materials:[],
+    steps:[
+      "Dzieci dobierają się w pary.",
+      "Jedna osoba rysuje palcem na plecach partnera wybraną liczbę.",
+      "Druga osoba odgaduje, jaka to liczba, i mówi ją po angielsku.",
+      "Po kilku próbach następuje zamiana ról."
+    ],
+    tip:"Zamiast liczb możesz rysować litery albo proste kształty."
+  },
+  {
+    id:"game-ten",
+    emoji:"🔟",
+    title:"Gra w 10 (Game of 10)",
+    category:"filler",
+    excerpt:"Liczycie po kolei do dziesięciu — kto powie „10”, odpada.",
+    levels:["A1","A2"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Liczby","Refleks"],
+    time:6,
+    energy:2,
+    materials:[],
+    steps:[
+      "Dzieci siedzą w kole i liczą po angielsku, każde po kolei.",
+      "W swojej turze można podać jedną lub dwie kolejne liczby.",
+      "Osoba, na którą wypadnie „10”, odpada z rundy.",
+      "Grajcie dalej, aż zostanie zwycięzca."
+    ],
+    tip:"Idealny wypełniacz ostatnich minut lekcji; można liczyć też do 20 lub 30."
+  },
+  {
+    id:"charades",
+    emoji:"🎭",
+    title:"Kalambury (Charades)",
+    category:"speaking",
+    excerpt:"Jedno dziecko rysuje lub pokazuje hasło, reszta zgaduje po angielsku.",
+    levels:["A1","A2","B1"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Słownictwo","Mówienie"],
+    time:12,
+    energy:3,
+    materials:["Karteczki z hasłami","Tablica (dla wersji rysowanej)"],
+    steps:[
+      "Dziecko losuje karteczkę z hasłem.",
+      "Pokazuje je gestami albo rysuje na tablicy — bez mówienia.",
+      "Reszta klasy zgaduje po angielsku, co to jest.",
+      "Kto odgadnie, losuje następne hasło."
+    ],
+    tip:"Wybierz jeden tryb (rysowanie albo pantomima) lub pozwól dziecku samemu zdecydować."
+  },
+  {
+    id:"whats-this",
+    emoji:"❔",
+    title:"What's this? (Co to jest?)",
+    category:"speaking",
+    excerpt:"Nauczyciel wybiera przedmiot z klasy, dzieci zgadują pytaniami tak/nie.",
+    levels:["A1","A2"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Mówienie","Pytania"],
+    time:8,
+    energy:2,
+    materials:[],
+    steps:[
+      "Wybierz w myślach przedmiot widoczny w sali.",
+      "Uczniowie zadają pytania zamknięte, np. „Is it a ball?”, „Is it a book?”.",
+      "Odpowiadaj krótko: „No, it isn't.” lub „Yes, it is.”.",
+      "Kto trafi, wymyśla kolejny przedmiot."
+    ],
+    phrase:"Is it a book? — Yes, it is. / Is it a ball? — No, it isn't.",
+    tip:"Świetnie utrwala krótkie odpowiedzi i budowę pytań z „is it”."
+  },
+  {
+    id:"find-somebody-who",
+    emoji:"🕵️",
+    title:"Find somebody who… (Znajdź kogoś, kto…)",
+    category:"speaking",
+    excerpt:"Uczniowie chodzą po klasie i wypytują kolegów, szukając osób o danych cechach.",
+    levels:["A2","B1","B2"],
+    ages:["Nastolatki","Dorośli"],
+    skills:["Mówienie","Pytania"],
+    time:12,
+    energy:3,
+    materials:["Karty pracy z warunkami"],
+    steps:[
+      "Przygotuj karty z warunkami, np. „ma brata”, „nie ma psa”, „lubi czytać”, „ma dziś coś zielonego”.",
+      "Uczniowie wstają i krążą po sali, zadając sobie pytania.",
+      "Przy każdym warunku wpisują imię osoby, która go spełnia.",
+      "Na koniec dzielicie się wynikami na forum."
+    ],
+    phrase:"Find somebody who… has got a brother / doesn't have a dog / likes dancing.",
+    tip:"Ustal, że jedno imię może pojawić się tylko raz — wymusza rozmowę z wieloma osobami."
+  },
+  {
+    id:"colours-game",
+    emoji:"🌈",
+    title:"Zabawa w kolory (Colours game)",
+    category:"movement",
+    excerpt:"Dzieci podają piłeczki w rytm muzyki; po nazwaniu koloru wstają ci, którzy go mają.",
+    levels:["A1","A2"],
+    ages:["Dzieci"],
+    skills:["Kolory","Słuchanie","Ruch"],
+    time:10,
+    energy:3,
+    materials:["Kolorowe piłeczki","Muzyka"],
+    steps:[
+      "Podziel dzieci na grupy i rozdaj każdej po jednej piłeczce w każdym kolorze.",
+      "Włącz muzykę — dzieci podają sobie piłeczki w kółku.",
+      "Gdy muzyka cichnie, wszyscy zatrzymują piłeczki.",
+      "Podaj nazwę koloru — kto trzyma piłeczkę w tym kolorze, wstaje."
+    ],
+    tip:"Zamiast kolorów możesz wołać liczby lub kształty naklejone na piłkach."
+  },
+  {
+    id:"what-have-i-drawn",
+    emoji:"🏠",
+    title:"What have I drawn? (Co narysowałem?)",
+    category:"vocab",
+    excerpt:"Dorysowujesz element po elemencie, a dzieci nazywają to, co powstaje.",
+    levels:["A1","A2","B1"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Słownictwo","Mówienie"],
+    time:10,
+    energy:2,
+    materials:["Tablica"],
+    steps:[
+      "Rysuj obrazek stopniowo, np. dom: ściana, okna, drzwi, dach, komin, klamka.",
+      "Po każdym elemencie pytaj: „What did I draw?” lub „What have I drawn?”.",
+      "Uczniowie nazywają element, a ty powtarzasz go dla utrwalenia.",
+      "Na koniec poproś kogoś o wymienienie wszystkiego z pamięci; możecie najpierw poćwiczyć w parach i podpisać rysunek."
+    ],
+    phrase:"What have I drawn? / What did I draw?",
+    tip:"Dobór czasu (Past Simple vs Present Perfect) dopasuj do etapu i celu lekcji."
+  },
+  {
+    id:"negatives-siblings",
+    emoji:"🙃",
+    title:"Przeczenia (Opposite siblings)",
+    category:"grammar",
+    excerpt:"Rodzeństwo o przeciwnych gustach: jedno twierdzi, drugie zaprzecza.",
+    levels:["A2","B1","B2"],
+    ages:["Nastolatki","Dorośli"],
+    skills:["Gramatyka","Mówienie"],
+    time:10,
+    energy:1,
+    materials:[],
+    steps:[
+      "Dobierz uczniów w pary wcielające się w rodzeństwo o odmiennych upodobaniach.",
+      "Pierwsza osoba mówi zdanie twierdzące, np. „I like cheese.”.",
+      "Druga natychmiast zaprzecza: „I don't like cheese.”.",
+      "Zmieniajcie czasy i tematy, ćwicząc pytania i przeczenia."
+    ],
+    phrase:"I like cheese. — I don't like cheese.",
+    tip:"Rozszerz na różne czasy: „I went… — I didn't go…”, „I have seen… — I haven't seen…”."
+  },
+  {
+    id:"card-race",
+    emoji:"🃏",
+    title:"Wyścig kart (Card race)",
+    category:"filler",
+    excerpt:"Dzieci obstawiają, która z dwóch kart pierwsza wróci wkoło do nauczyciela.",
+    levels:["A1","A2"],
+    ages:["Dzieci"],
+    skills:["Słownictwo","Emocje"],
+    time:6,
+    energy:2,
+    materials:["Flashcards"],
+    steps:[
+      "Pokaż dwie karty i poproś dzieci o typ, która wygra wyścig.",
+      "Puść jedną kartę w lewą, a drugą w prawą stronę koła.",
+      "Dzieci szybko podają karty dalej dookoła.",
+      "Karta, która pierwsza wróci do nauczyciela, wygrywa."
+    ],
+    tip:"Przy okazji dzieci wielokrotnie nazywają obie karty — utrwalasz słownictwo mimochodem."
+  },
+  {
+    id:"magnet-game",
+    emoji:"🧲",
+    title:"Zabawa w magnes (Magnet game)",
+    category:"movement",
+    excerpt:"Na komendę dzieci stykają się wskazanymi częściami ciała.",
+    levels:["A1","A2"],
+    ages:["Dzieci"],
+    skills:["Części ciała","Ruch"],
+    time:8,
+    energy:3,
+    materials:[],
+    steps:[
+      "Zabawa dla dzieci, które znają już nazwy części ciała. Dobierz je w pary.",
+      "Wydawaj komendy typu „Shoulder to shoulder”, „Knee to knee”, „Head to head”.",
+      "Pary stykają się wskazanymi częściami ciała, jakby były przyciągane jak magnesy.",
+      "Zwiększaj tempo i łącz komendy dla większej zabawy."
+    ],
+    phrase:"Shoulder to shoulder! Knee to knee! Head to head!",
+    tip:"Na koniec możesz zawołać „Back to back!” i poprosić o zamianę par."
+  },
+  {
+    id:"guessing-flashcards",
+    emoji:"🎴",
+    title:"Zgadywanki (Guessing game)",
+    category:"speaking",
+    excerpt:"Nauczyciel losuje kartę, nie patrząc, i sam zgaduje, co na niej jest.",
+    levels:["A1","A2"],
+    ages:["Dzieci"],
+    skills:["Słownictwo","Pytania"],
+    time:8,
+    energy:2,
+    materials:["Flashcards tematyczne"],
+    steps:[
+      "Przygotuj zestaw tematyczny, np. Toys (Zabawki).",
+      "Wylosuj kartę, nie zaglądając na nią, i odwróć obrazkiem do dzieci.",
+      "Zgaduj na głos, np. „Is it a doll?”; dzieci potwierdzają lub poprawiają.",
+      "Np. przy obrazku pociągu: „Is it a car?” — „No, it's a train.”."
+    ],
+    phrase:"Is it a doll? — Yes! / Is it a car? — No, it's a train.",
+    tip:"Odwrócenie ról (to nauczyciel zgaduje) świetnie ośmiela nieśmiałe dzieci."
+  },
+  {
+    id:"whats-in-my-box",
+    emoji:"📦",
+    title:"What have I got in my box? (Co mam w pudełku?)",
+    category:"speaking",
+    excerpt:"Dzieci zgadują ukrytą w pudełku rzecz — na głos albo dotykiem.",
+    levels:["A1","A2"],
+    ages:["Dzieci"],
+    skills:["Słownictwo","Pytania","Zmysły"],
+    time:8,
+    energy:2,
+    materials:["Pudełko","Przedmioty lub ilustracje"],
+    steps:[
+      "Schowaj w pudełku przedmiot lub obrazek związany z tematem.",
+      "Zapytaj: „What have I got in my box?” i pozwól dzieciom zgadywać po kolei.",
+      "Gdy padnie trafna odpowiedź, wyjmij ukrytą rzecz.",
+      "Wariant dotykowy: dziecko wkłada rękę do pudełka i rozpoznaje przedmiot bez patrzenia."
+    ],
+    phrase:"What have I got in my box?",
+    tip:"Do wersji dotykowej wybieraj przedmioty o wyraźnym, rozpoznawalnym kształcie."
+  },
+  {
+    id:"who-stole-cookies",
+    emoji:"🍪",
+    title:"Who stole the cookies? (Kto ukradł ciasteczka?)",
+    category:"speaking",
+    excerpt:"Rytmiczny łańcuszek oskarżeń przerzucanych z dziecka na dziecko.",
+    levels:["A1","A2","B1"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Mówienie","Rytm"],
+    time:8,
+    energy:2,
+    materials:[],
+    steps:[
+      "Rozpocznij oskarżeniem: „Kasia stole the cookies from the cookie box!”.",
+      "Wywołana osoba odpowiada schematem: „Who? Me?” — „Yes, you!” — „Not me!” — „Then who?”.",
+      "Następnie przerzuca winę na kolejne dziecko, wymieniając jego imię.",
+      "Zabawa toczy się rytmicznie dalej, obejmując całą klasę."
+    ],
+    phrase:"Who stole the cookies from the cookie box? — Who? Me? — Yes, you! — Not me!",
+    tip:"Utrzymuj równe tempo klaskaniem — łańcuszek wtedy naprawdę wciąga."
+  },
+  {
+    id:"missing-face-parts",
+    emoji:"👃",
+    title:"Rysowanie brakujących części twarzy (Missing face parts)",
+    category:"vocab",
+    excerpt:"Rysujesz twarze bez jednego elementu, a dzieci mówią, czego brakuje.",
+    levels:["A1","A2"],
+    ages:["Dzieci"],
+    skills:["Słownictwo","Części twarzy"],
+    time:8,
+    energy:1,
+    materials:["Tablica"],
+    steps:[
+      "Zapowiedz, że narysujesz kilka twarzy, a dzieci mają wychwycić braki.",
+      "Narysuj twarz bez nosa i zapytaj: „What's missing?”.",
+      "Dzieci odpowiadają, np. „nose”.",
+      "Powtarzaj z twarzami, którym brakuje innych elementów (oczu, ust, uszu)."
+    ],
+    phrase:"What's missing? — Nose!",
+    tip:"Na koniec możesz poprosić dzieci o dorysowanie brakujących części."
+  },
+  {
+    id:"detective-plurals",
+    emoji:"🔬",
+    title:"Zabawa w detektywa (Detective game)",
+    category:"grammar",
+    excerpt:"Dzieci same odkrywają zasady tworzenia liczby mnogiej — w mowie i piśmie.",
+    levels:["A2","B1"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Gramatyka","Wymowa","Ortografia"],
+    time:15,
+    energy:1,
+    materials:["Obrazki produktów w l. poj. i mnogiej","Podpisy"],
+    steps:[
+      "Pokaż obrazki produktów w liczbie pojedynczej i mnogiej.",
+      "Poproś, by dzieci wychwyciły różnicę w wymowie (końcówka -s w liczbie mnogiej).",
+      "Pokaż i przeczytaj podpisy: peach – peaches, egg – eggs, orange – oranges, apple – apples, cherry – cherries, fish – fish, potato – potatoes, carrot – carrots.",
+      "Teraz zadaniem jest odkrycie różnic w pisowni i sformułowanie reguł."
+    ],
+    tip:"Reguły do odkrycia: samogłoska/„syczący” dźwięk → -es; -y po spółgłosce → -ies; pozostałe → -s; „fish” to wyjątek (ta sama forma)."
+  },
+  {
+    id:"first-to-say-z",
+    emoji:"🔤",
+    title:"First to say Z (Kto pierwszy powie Z)",
+    category:"filler",
+    excerpt:"Podajecie piłkę i literujecie alfabet — kto powie „Z”, wygrywa rundę.",
+    levels:["A1","A2"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Alfabet","Refleks"],
+    time:8,
+    energy:2,
+    materials:["Piłka"],
+    steps:[
+      "Dzieci siedzą w kole; rundę zaczyna osoba z piłką.",
+      "W swojej turze można powiedzieć 1, 2 lub najwyżej 3 litery alfabetu, po czym podaje się piłkę dalej.",
+      "Np. pierwsze dziecko: „A B C”, drugie: „D”, trzecie: „E F G”.",
+      "Kto pierwszy powie „Z”, zdobywa punkt. Grajcie do 3 punktów."
+    ],
+    tip:"Zamiast alfabetu możecie liczyć albo wymieniać miesiące."
+  },
+  {
+    id:"mr-wolf-time",
+    emoji:"🐺",
+    title:"What's the time, Mr Wolf? (Która godzina, Panie Wilku?)",
+    category:"movement",
+    excerpt:"Dzieci podchodzą do wilka, odliczając kroki, aż ten zawoła „Dinner time!”.",
+    levels:["A1","A2"],
+    ages:["Dzieci"],
+    skills:["Liczby","Godziny","Ruch"],
+    time:10,
+    energy:3,
+    materials:[],
+    steps:[
+      "Jeden uczeń („Wilk”) staje twarzą do ściany, reszta na przeciwległym końcu sali.",
+      "Dzieci wołają: „What's the time, Mr Wolf?”, a wilk odpowiada np. „It's three o'clock.”.",
+      "Dzieci robią tyle kroków, ile wynosi godzina, głośno je odliczając.",
+      "Gdy wilk słyszy dzieci blisko, woła „It's dinner time!” i próbuje kogoś złapać. Złapany zostaje nowym wilkiem."
+    ],
+    phrase:"What's the time, Mr Wolf? — It's three o'clock. … It's dinner time!",
+    tip:"Idealna, gdy grupa potrzebuje ruchu; przy okazji utrwala liczebniki i godziny."
+  },
+  {
+    id:"change-places",
+    emoji:"🔄",
+    title:"Zamiana miejsc (Change places)",
+    category:"movement",
+    excerpt:"Na wywołane słowo dzieci z tą samą karteczką zamieniają się krzesłami.",
+    levels:["A1","A2","B1"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Słownictwo","Ruch"],
+    time:10,
+    energy:3,
+    materials:["Karteczki z wyrazami"],
+    steps:[
+      "Dzieci siedzą w kole na krzesłach; każde dostaje karteczki z wyrazami (maks. 5–6), np. ubrania.",
+      "Nauczyciel stoi w środku i wywołuje jeden z wyrazów.",
+      "Wszystkie dzieci z tym wyrazem zrywają się i zamieniają miejscami.",
+      "Nauczyciel też zajmuje krzesło — kto zostanie w środku, wywołuje kolejny wyraz."
+    ],
+    tip:"Szczególnie lubiana przez dzieci ruchliwe i kinestetyczne."
+  },
+  {
+    id:"are-you-bob",
+    emoji:"🔎",
+    title:"Are you Bob? (Zabawa w szukanie Boba)",
+    category:"speaking",
+    excerpt:"Poszukiwacz wraca do sali i pyta, aż odnajdzie ukrytego wśród dzieci „Boba”.",
+    levels:["A1","A2"],
+    ages:["Dzieci"],
+    skills:["Mówienie","Przedstawianie się"],
+    time:8,
+    energy:2,
+    materials:[],
+    steps:[
+      "Jeden uczeń wychodzi z sali; reszta wybiera spośród siebie „Boba”.",
+      "Poszukiwacz wraca i pyta kolejne osoby: „Are you Bob?”.",
+      "Wszyscy oprócz Boba odpowiadają: „No, I'm sorry. I'm Wojtek/Piotr…” (podając prawdziwe imię).",
+      "Gdy znajdzie Boba, to Bob wychodzi i zabawa zaczyna się od nowa."
+    ],
+    phrase:"Are you Bob? — No, I'm sorry. I'm Wojtek.",
+    tip:"Utrwala przedstawianie się i krótkie odpowiedzi przeczące."
+  },
+  {
+    id:"whos-got-it",
+    emoji:"🤫",
+    title:"Who's got it? (Kto to ma?)",
+    category:"vocab",
+    excerpt:"Klasa odgaduje, które dziecko trzyma wywołaną kartę.",
+    levels:["A1","A2","B1"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Słownictwo","Pamięć"],
+    time:8,
+    energy:1,
+    materials:["Flashcards"],
+    steps:[
+      "Rozdaj karty kilku uczniom.",
+      "Nazwij przedmiot z jednej z kart i zapytaj: „Who's got it?”.",
+      "Klasa podaje imię osoby trzymającej tę kartę.",
+      "Dla utrudnienia uczniowie trzymają karty odwrócone obrazkiem do siebie."
+    ],
+    phrase:"Who's got it? / What's … got?",
+    tip:"Wariant pamięciowy: pytaj „What's Ania got?”, a klasa odpowiada z pamięci."
+  },
+  {
+    id:"find-your-partner",
+    emoji:"🧩",
+    title:"Find your partner (Znajdź swojego partnera)",
+    category:"movement",
+    excerpt:"Dzieci z obrazkami szukają kolegów z pasującymi wyrazami.",
+    levels:["A1","A2","B1"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Czytanie","Słownictwo","Ruch"],
+    time:10,
+    energy:2,
+    materials:["Flashcards","Wordcards"],
+    steps:[
+      "Połowie klasy rozdaj karty obrazkowe, drugiej połowie karty z wyrazami.",
+      "Dzieci chodzą po sali i szukają osoby z pasującą kartą.",
+      "Gdy się odnajdą, siadają razem.",
+      "Poproś każdą parę o odczytanie swojego wyrazu."
+    ],
+    tip:"Spokojniejszy wariant: dzieci z obrazkami siedzą, a chodzą tylko te z wyrazami."
+  },
+  {
+    id:"memory-game",
+    emoji:"🧠",
+    title:"Memory game (Gra pamięciowa / Memory)",
+    category:"vocab",
+    excerpt:"Klasyczne odkrywanie par kart obrazek–podpis.",
+    levels:["A1","A2","B1"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Słownictwo","Pamięć","Czytanie"],
+    time:12,
+    energy:1,
+    materials:["Pary kart: obrazek + podpis"],
+    steps:[
+      "Rozłóżcie karty obrazkiem/tekstem do dołu.",
+      "Każdy uczeń po kolei odkrywa dwie dowolne karty.",
+      "Jeśli tworzą parę (obrazek + podpis), zabiera je; jeśli nie — zakrywa z powrotem.",
+      "Wygrywa osoba z największą liczbą zdobytych par."
+    ],
+    tip:"Dobrze łączy czytanie z zapamiętywaniem słownictwa."
+  },
+  {
+    id:"blindfold-ciuciubabka",
+    emoji:"🧣",
+    title:"Ciuciubabka (Blindfold game)",
+    category:"vocab",
+    excerpt:"Dziecko z zawiązanymi oczami rozpoznaje przedmiot dotykiem.",
+    levels:["A1","A2"],
+    ages:["Dzieci"],
+    skills:["Słownictwo","Zmysły"],
+    time:8,
+    energy:2,
+    materials:["Szalik","Różne przedmioty (np. przybory szkolne)"],
+    steps:[
+      "Rozłóż na biurku różne przedmioty.",
+      "Zawiąż oczy jednemu z uczniów.",
+      "Uczeń bierze przedmiot i po dotyku próbuje odgadnąć, co to jest, nazywając go po angielsku.",
+      "Po udanej próbie następuje zmiana osoby."
+    ],
+    tip:"Wybieraj przedmioty o wyraźnej fakturze i kształcie."
+  },
+  {
+    id:"king-of-animals",
+    emoji:"🦁",
+    title:"Król zwierząt (King of the animals)",
+    category:"speaking",
+    excerpt:"Ukryte dzieci naśladują głosy zwierząt, a król zgaduje, kto to.",
+    levels:["A1","A2"],
+    ages:["Dzieci"],
+    skills:["Zwierzęta","Słuchanie"],
+    time:10,
+    energy:3,
+    materials:["Kartoniki z numerami i zwierzętami"],
+    steps:[
+      "Jedno dziecko zostaje Królem Zwierząt; reszta dostaje kartoniki z numerem i zwierzęciem.",
+      "Na hasło dzieci rozbiegają się i chowają.",
+      "Król wywołuje numer, a wywołane dziecko odzywa się głosem swojego zwierzęcia.",
+      "Król zgaduje zwierzę; jeśli trafi, dziecko wychodzi i zostaje nowym królem."
+    ],
+    tip:"Zadbaj o bezpieczne miejsca do chowania się lub zamień bieganie na kucanie za ławką."
+  },
+  {
+    id:"how-much-remember",
+    emoji:"☕",
+    title:"Ile zapamiętasz? (How much can you remember?)",
+    category:"speaking",
+    excerpt:"Rozbudowujecie jedno zdanie, dokładając kolejne wyrazy z pamięci.",
+    levels:["A1","A2","B1"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Słownictwo","Pamięć"],
+    time:8,
+    energy:1,
+    materials:[],
+    steps:[
+      "Rozpocznij zdaniem, np. „I like coffee.”.",
+      "Pierwszy uczeń dokłada wyraz: „I like coffee and tea.”.",
+      "Kolejni powtarzają cały ciąg i dodają nowy element.",
+      "Wygrywa osoba, która zapamięta najdłuższy łańcuch."
+    ],
+    phrase:"I like coffee and tea and…",
+    tip:"Dobierz początek zdania do tematu lekcji (jedzenie, zwierzęta, czynności)."
+  },
+  {
+    id:"matching-pairs",
+    emoji:"🔢",
+    title:"Matching pairs (Dopasowywanie par)",
+    category:"vocab",
+    excerpt:"Dzieci dopasowują cyfry do liczby kropek na kartach.",
+    levels:["A1","A2"],
+    ages:["Dzieci"],
+    skills:["Liczby","Dopasowywanie"],
+    time:8,
+    energy:1,
+    materials:["Flashcards z cyframi","Karty z kropkami"],
+    steps:[
+      "Rozłóż na dywanie karty, np. z liczbami.",
+      "Zadaniem dzieci jest dobranie cyfry do karty z odpowiednią liczbą kropek.",
+      "Nazwijcie na głos każdą dopasowaną liczbę.",
+      "Możecie grać na czas lub w parach."
+    ],
+    tip:"Ten sam schemat działa dla par obrazek–cień albo obrazek–pierwsza litera."
+  },
+  {
+    id:"match-numbers-words",
+    emoji:"🔠",
+    title:"Match the numbers with words (Dopasuj liczby do słów)",
+    category:"writing",
+    excerpt:"Dzieci czytają podpisy liczebników i przypisują im właściwe cyfry.",
+    levels:["A1","A2"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Czytanie","Liczby"],
+    time:8,
+    energy:1,
+    materials:["Cyfry 1–10","Podpisy słowne"],
+    steps:[
+      "Przygotuj cyfry od 1 do 10 oraz ich zapisy słowne (one, two, three…).",
+      "Dzieci odczytują podpisy.",
+      "Następnie dobierają do każdego słowa właściwą cyfrę.",
+      "Sprawdźcie wspólnie i przeczytajcie pary na głos."
+    ],
+    tip:"Rozszerz zakres do 20, gdy grupa opanuje pierwszą dziesiątkę."
   },
 ];
 
