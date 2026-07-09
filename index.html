@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Language Teacher's Toolbox — Zabawy, gry i metody aktywizujące</title>
+<style>
+  :root{
+    --bg:#f4f6fb;
+    --bg-soft:#ffffff;
+    --ink:#1f2440;
+    --ink-soft:#5b6280;
+    --line:#e5e8f2;
+    --brand:#6c5ce7;
+    --brand-2:#00b894;
+    --brand-3:#fd79a8;
+    --accent:#ffa801;
+    --shadow:0 10px 30px rgba(38,43,84,.10);
+    --shadow-sm:0 4px 14px rgba(38,43,84,.08);
+    --radius:18px;
+    --radius-sm:12px;
+  }
+  html[data-theme="dark"]{
+    --bg:#0f1120;
+    --bg-soft:#191c33;
+    --ink:#eef0ff;
+    --ink-soft:#a2a8cf;
+    --line:#2a2e4d;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+    --shadow-sm:0 4px 14px rgba(0,0,0,.30);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.55;
+    transition:background .3s,color .3s;
+  }
+  a{color:var(--brand)}
+
+  /* ---------- HEADER ---------- */
+  .hero{
+    position:relative;
+    padding:38px 22px 30px;
+    background:
+      radial-gradient(1200px 400px at 12% -10%, rgba(253,121,168,.55), transparent 60%),
+      radial-gradient(900px 380px at 90% -20%, rgba(0,184,148,.5), transparent 60%),
+      linear-gradient(135deg,#6c5ce7,#5b4bd6);
+    color:#fff;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";position:absolute;inset:0;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ctext y='30' font-size='28'%3E%3C/text%3E%3C/svg%3E");
+    opacity:.06;
+  }
+  .hero-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1}
+  .brand-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .logo{display:flex;align-items:center;gap:14px}
+  .logo-badge{
+    width:56px;height:56px;border-radius:16px;
+    background:rgba(255,255,255,.18);backdrop-filter:blur(6px);
+    display:grid;place-items:center;font-size:30px;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.25);
+  }
+  .logo h1{font-size:1.55rem;margin:0;letter-spacing:.2px}
+  .logo p{margin:2px 0 0;opacity:.9;font-size:.9rem}
+  .hero-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .icon-btn{
+    border:none;cursor:pointer;border-radius:12px;padding:10px 14px;font-size:.9rem;font-weight:600;
+    background:rgba(255,255,255,.16);color:#fff;display:inline-flex;align-items:center;gap:8px;
+    transition:transform .12s,background .2s;
+  }
+  .icon-btn:hover{background:rgba(255,255,255,.28);transform:translateY(-1px)}
+  .icon-btn.solid{background:#fff;color:var(--brand)}
+
+  /* ---------- SEARCH + STATS ---------- */
+  .searchbar{
+    margin-top:26px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;
+  }
+  .search-wrap{flex:1;min-width:260px;position:relative}
+  .search-wrap input{
+    width:100%;border:none;border-radius:14px;padding:16px 16px 16px 50px;font-size:1.05rem;
+    box-shadow:var(--shadow);background:#fff;color:#1f2440;
+  }
+  .search-wrap .mag{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:1.2rem;opacity:.6}
+  .stat-chips{display:flex;gap:10px;flex-wrap:wrap}
+  .stat-chip{
+    background:rgba(255,255,255,.16);border-radius:12px;padding:10px 14px;font-size:.85rem;font-weight:600;
+    display:flex;flex-direction:column;line-height:1.2;
+  }
+  .stat-chip b{font-size:1.15rem}
+
+  /* ---------- LAYOUT ---------- */
+  .wrap{max-width:1180px;margin:0 auto;padding:22px}
+  .toolbar{
+    display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between;
+    margin-bottom:18px;
+  }
+  .filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  select,.mini-select{
+    border:1px solid var(--line);background:var(--bg-soft);color:var(--ink);
+    border-radius:10px;padding:9px 12px;font-size:.88rem;font-weight:600;cursor:pointer;
+  }
+  .view-tabs{display:flex;gap:6px;background:var(--bg-soft);border:1px solid var(--line);border-radius:12px;padding:4px}
+  .view-tabs button{
+    border:none;background:transparent;color:var(--ink-soft);font-weight:700;font-size:.85rem;
+    padding:8px 14px;border-radius:9px;cursor:pointer;transition:.2s;
+  }
+  .view-tabs button.active{background:var(--brand);color:#fff}
+
+  /* ---------- CATEGORY PILLS ---------- */
+  .cat-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+  .pill{
+    border:1px solid var(--line);background:var(--bg-soft);color:var(--ink-soft);
+    padding:8px 14px;border-radius:999px;font-size:.85rem;font-weight:700;cursor:pointer;
+    display:inline-flex;align-items:center;gap:6px;transition:.18s;
+  }
+  .pill:hover{transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+  .pill.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  /* ---------- CARDS ---------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+  .card{
+    background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow-sm);overflow:hidden;display:flex;flex-direction:column;
+    transition:transform .16s,box-shadow .16s;cursor:pointer;position:relative;
+  }
+  .card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+  .card-top{padding:16px 16px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+  .card-emoji{
+    width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:26px;flex:none;
+    background:linear-gradient(135deg,rgba(108,92,231,.15),rgba(0,184,148,.15));
+  }
+  .fav-btn{
+    border:none;background:transparent;font-size:1.5rem;cursor:pointer;line-height:1;
+    filter:grayscale(1);opacity:.5;transition:.15s;padding:2px;
+  }
+  .fav-btn.on{filter:none;opacity:1;transform:scale(1.05)}
+  .card-body{padding:12px 16px 14px;flex:1}
+  .card h3{margin:6px 0 6px;font-size:1.12rem;line-height:1.25}
+  .card .excerpt{color:var(--ink-soft);font-size:.9rem;margin:0}
+  .meta-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+  .tag{
+    font-size:.72rem;font-weight:700;padding:4px 9px;border-radius:8px;
+    background:rgba(108,92,231,.12);color:var(--brand);letter-spacing:.2px;
+  }
+  .tag.lvl{background:rgba(0,184,148,.14);color:#0a8c6e}
+  .tag.time{background:rgba(255,168,1,.16);color:#b57d00}
+  .tag.age{background:rgba(253,121,168,.16);color:#c93f77}
+  html[data-theme="dark"] .tag.lvl{color:#43e0b8}
+  html[data-theme="dark"] .tag.time{color:#ffc94d}
+  html[data-theme="dark"] .tag.age{color:#ff9ac2}
+  .card-foot{
+    border-top:1px solid var(--line);padding:10px 16px;display:flex;justify-content:space-between;
+    align-items:center;font-size:.8rem;color:var(--ink-soft);font-weight:600;
+  }
+  .cat-dot{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:9px;height:9px;border-radius:50%}
+  .plan-add{border:none;background:transparent;color:var(--brand);font-weight:800;cursor:pointer;font-size:.8rem}
+
+  /* ---------- EMPTY ---------- */
+  .empty{
+    text-align:center;padding:70px 20px;color:var(--ink-soft);
+  }
+  .empty .big{font-size:56px;margin-bottom:8px}
+
+  /* ---------- MODAL ---------- */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(16,18,32,.55);backdrop-filter:blur(4px);
+    display:none;align-items:flex-start;justify-content:center;padding:30px 16px;z-index:60;overflow:auto;
+  }
+  .modal-overlay.open{display:flex}
+  .modal{
+    background:var(--bg-soft);border-radius:22px;max-width:720px;width:100%;box-shadow:var(--shadow);
+    animation:pop .22s ease;overflow:hidden;
+  }
+  @keyframes pop{from{transform:translateY(14px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+  .modal-head{
+    padding:24px 26px;color:#fff;position:relative;
+    background:linear-gradient(135deg,var(--brand),#8a7bef);
+  }
+  .modal-head .m-emoji{font-size:40px}
+  .modal-head h2{margin:8px 0 4px;font-size:1.5rem}
+  .modal-head .m-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .modal-head .m-meta .tag{background:rgba(255,255,255,.2);color:#fff}
+  .close-x{
+    position:absolute;top:16px;right:16px;border:none;background:rgba(255,255,255,.2);color:#fff;
+    width:38px;height:38px;border-radius:11px;font-size:1.2rem;cursor:pointer;
+  }
+  .modal-content{padding:24px 26px 28px}
+  .modal-content h4{margin:20px 0 8px;font-size:1rem;text-transform:uppercase;letter-spacing:.6px;color:var(--brand)}
+  .modal-content h4:first-child{margin-top:0}
+  .steps{margin:0;padding-left:0;list-style:none;counter-reset:step}
+  .steps li{
+    position:relative;padding:8px 0 8px 42px;border-bottom:1px dashed var(--line);
+  }
+  .steps li::before{
+    counter-increment:step;content:counter(step);
+    position:absolute;left:0;top:8px;width:28px;height:28px;border-radius:9px;
+    background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.85rem;
+  }
+  .callout{
+    background:rgba(0,184,148,.12);border-left:4px solid var(--brand-2);
+    padding:12px 14px;border-radius:10px;margin-top:8px;font-size:.92rem;
+  }
+  .phrase{
+    background:rgba(255,168,1,.14);border-left:4px solid var(--accent);
+    padding:12px 14px;border-radius:10px;margin-top:8px;font-style:italic;
+  }
+  .modal-foot{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+  .btn{
+    border:none;border-radius:12px;padding:12px 18px;font-weight:800;font-size:.9rem;cursor:pointer;
+    display:inline-flex;align-items:center;gap:8px;transition:.15s;
+  }
+  .btn.primary{background:var(--brand);color:#fff}
+  .btn.ghost{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+  .btn:hover{transform:translateY(-1px)}
+
+  /* ---------- FORM ---------- */
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .form-grid .full{grid-column:1/-1}
+  label.fld{display:block;font-size:.8rem;font-weight:800;color:var(--ink-soft);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+  input.txt,textarea.txt,select.txt{
+    width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);
+    border-radius:10px;padding:11px 12px;font-size:.92rem;font-family:inherit;
+  }
+  textarea.txt{min-height:90px;resize:vertical}
+  .hint{font-size:.76rem;color:var(--ink-soft);margin-top:4px}
+
+  /* ---------- PLAN DRAWER ---------- */
+  .drawer{
+    position:fixed;top:0;right:0;height:100%;width:380px;max-width:90vw;background:var(--bg-soft);
+    box-shadow:-12px 0 40px rgba(0,0,0,.2);z-index:70;transform:translateX(105%);transition:transform .28s;
+    display:flex;flex-direction:column;
+  }
+  .drawer.open{transform:none}
+  .drawer-head{padding:20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  .drawer-head h3{margin:0}
+  .drawer-body{flex:1;overflow:auto;padding:16px 20px}
+  .plan-item{
+    background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;
+    display:flex;gap:10px;align-items:flex-start;
+  }
+  .plan-item .pi-emoji{font-size:22px}
+  .plan-item h5{margin:0 0 3px;font-size:.95rem}
+  .plan-item small{color:var(--ink-soft)}
+  .plan-item .rm{margin-left:auto;border:none;background:transparent;color:var(--brand-3);cursor:pointer;font-size:1.1rem}
+  .drawer-foot{padding:16px 20px;border-top:1px solid var(--line);display:flex;gap:10px}
+  .fab{
+    position:fixed;right:22px;bottom:22px;z-index:50;background:var(--brand);color:#fff;border:none;
+    border-radius:16px;padding:14px 18px;font-weight:800;cursor:pointer;box-shadow:var(--shadow);
+    display:flex;align-items:center;gap:10px;font-size:.95rem;
+  }
+  .fab .count{background:#fff;color:var(--brand);border-radius:999px;padding:1px 9px;font-size:.8rem}
+
+  /* ---------- TOAST ---------- */
+  .toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:#fff;padding:12px 20px;border-radius:12px;font-weight:700;
+    opacity:0;pointer-events:none;transition:.25s;z-index:90;font-size:.9rem;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  footer{max-width:1180px;margin:20px auto 40px;padding:0 22px;color:var(--ink-soft);font-size:.85rem;text-align:center}
+
+  @media(max-width:640px){
+    .form-grid{grid-template-columns:1fr}
+    .logo h1{font-size:1.25rem}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="brand-row">
+      <div class="logo">
+        <div class="logo-badge">🎲</div>
+        <div>
+          <h1>Language Teacher's Toolbox</h1>
+          <p>Zabawy, gry i metody aktywizujące na lekcje języków obcych</p>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <button class="icon-btn" id="randomBtn">🎰 Wylosuj</button>
+        <button class="icon-btn" id="addBtn">➕ Dodaj zabawę</button>
+        <button class="icon-btn" id="ioBtn">💾 Kopia</button>
+        <button class="icon-btn" id="themeBtn">🌙</button>
+      </div>
+    </div>
+
+    <div class="searchbar">
+      <div class="search-wrap">
+        <span class="mag">🔍</span>
+        <input id="search" type="text" placeholder="Szukaj zabawy, słowa kluczowego, umiejętności… (np. flashcards, mówienie, rozgrzewka)" />
+      </div>
+      <div class="stat-chips">
+        <div class="stat-chip">Zabaw<b id="statTotal">0</b></div>
+        <div class="stat-chip">Ulubione<b id="statFav">0</b></div>
+        <div class="stat-chip">W planie<b id="statPlan">0</b></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== MAIN ===================== -->
+<main class="wrap">
+  <div class="cat-pills" id="catPills"></div>
+
+  <div class="toolbar">
+    <div class="filters">
+      <select id="levelFilter" data-role="level"><option value="">Poziom: wszystkie</option></select>
+      <select id="ageFilter" data-role="age"><option value="">Wiek: każdy</option></select>
+      <select id="skillFilter" data-role="skill"><option value="">Umiejętność: dowolna</option></select>
+      <select id="sortBy">
+        <option value="az">Sortuj: A–Z</option>
+        <option value="za">Sortuj: Z–A</option>
+        <option value="time">Sortuj: czas ↑</option>
+      </select>
+    </div>
+    <div class="view-tabs">
+      <button data-view="all" class="active">Wszystkie</button>
+      <button data-view="fav">⭐ Ulubione</button>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none">
+    <div class="big">🔎</div>
+    <h3>Brak wyników</h3>
+    <p>Zmień filtry lub wyszukaj inne słowo. Możesz też dodać własną zabawę przyciskiem „➕ Dodaj zabawę”.</p>
+  </div>
+</main>
+
+<footer>
+  Zbudowane z ❤️ dla nauczycieli języków. Dane zapisują się lokalnie w Twojej przeglądarce (ulubione, plan lekcji i własne zabawy).
+</footer>
+
+<!-- FAB plan -->
+<button class="fab" id="planFab">📋 Plan lekcji <span class="count" id="planCount">0</span></button>
+
+<!-- ===================== MODAL: DETAIL ===================== -->
+<div class="modal-overlay" id="detailOverlay">
+  <div class="modal" id="detailModal"></div>
+</div>
+
+<!-- ===================== MODAL: ADD/EDIT ===================== -->
+<div class="modal-overlay" id="formOverlay">
+  <div class="modal">
+    <div class="modal-head" style="background:linear-gradient(135deg,#00b894,#0a8c6e)">
+      <button class="close-x" data-close="form">✕</button>
+      <div class="m-emoji">✏️</div>
+      <h2 id="formTitle">Dodaj nową zabawę</h2>
+    </div>
+    <div class="modal-content">
+      <div class="form-grid">
+        <div>
+          <label class="fld">Emoji</label>
+          <input class="txt" id="f_emoji" placeholder="🃏" maxlength="4" />
+        </div>
+        <div>
+          <label class="fld">Kategoria</label>
+          <select class="txt" id="f_category"></select>
+        </div>
+        <div class="full">
+          <label class="fld">Nazwa zabawy</label>
+          <input class="txt" id="f_title" placeholder="np. Which one is missing?" />
+        </div>
+        <div class="full">
+          <label class="fld">Krótki opis (widoczny na karcie)</label>
+          <input class="txt" id="f_excerpt" placeholder="Jedno zdanie zachęty…" />
+        </div>
+        <div>
+          <label class="fld">Poziomy (po przecinku)</label>
+          <input class="txt" id="f_levels" placeholder="A1, A2, B1" />
+        </div>
+        <div>
+          <label class="fld">Wiek</label>
+          <input class="txt" id="f_ages" placeholder="Dzieci, Nastolatki" />
+        </div>
+        <div>
+          <label class="fld">Umiejętności (po przecinku)</label>
+          <input class="txt" id="f_skills" placeholder="Słownictwo, Mówienie" />
+        </div>
+        <div>
+          <label class="fld">Czas (min)</label>
+          <input class="txt" id="f_time" type="number" placeholder="10" />
+        </div>
+        <div class="full">
+          <label class="fld">Materiały (po przecinku)</label>
+          <input class="txt" id="f_materials" placeholder="Flashcards" />
+        </div>
+        <div class="full">
+          <label class="fld">Instrukcje krok po kroku (każdy krok w nowej linii)</label>
+          <textarea class="txt" id="f_steps" placeholder="Rozłóż flashcards na dywanie.&#10;Dzieci zamykają oczy…"></textarea>
+        </div>
+        <div class="full">
+          <label class="fld">Zwroty/komendy dla nauczyciela (opcjonalnie)</label>
+          <input class="txt" id="f_phrase" placeholder="Close your eyes. Which one is missing?" />
+        </div>
+        <div class="full">
+          <label class="fld">Wskazówka / wariant (opcjonalnie)</label>
+          <textarea class="txt" id="f_tip" placeholder="Utrudnienie: zabierz 2 obrazki naraz…"></textarea>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn primary" id="saveActivity">💾 Zapisz zabawę</button>
+        <button class="btn ghost" data-close="form">Anuluj</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL: IMPORT/EXPORT ===================== -->
+<div class="modal-overlay" id="ioOverlay">
+  <div class="modal">
+    <div class="modal-head" style="background:linear-gradient(135deg,#fd79a8,#c93f77)">
+      <button class="close-x" data-close="io">✕</button>
+      <div class="m-emoji">💾</div>
+      <h2>Kopia zapasowa danych</h2>
+    </div>
+    <div class="modal-content">
+      <h4>Pełna kopia zapasowa</h4>
+      <p style="color:var(--ink-soft);margin-top:0">Zapisuje wszystko: własne zabawy, ulubione, plan lekcji i ukryte pozycje. Dobre do przeniesienia na inny komputer.</p>
+      <div class="modal-foot" style="margin-top:8px">
+        <button class="btn primary" id="exportBtn">⬇️ Pobierz pełną kopię</button>
+        <label class="btn ghost">⬆️ Wczytaj kopię
+          <input type="file" id="importFile" accept="application/json" hidden />
+        </label>
+      </div>
+      <p class="hint">Przy wczytywaniu zapytamy, czy <b>scalić</b> z obecnymi danymi, czy <b>zastąpić</b> je.</p>
+
+      <h4>Dziel się zabawami</h4>
+      <p style="color:var(--ink-soft);margin-top:0">Wyeksportuj tylko <b>swoje własne zabawy</b> (bez ulubionych i planu), aby wysłać je koleżance/koledze. Taki plik można też tutaj wczytać.</p>
+      <div class="modal-foot" style="margin-top:8px">
+        <button class="btn primary" id="exportGamesBtn" style="background:var(--brand-2)">🎁 Eksportuj moje zabawy</button>
+        <label class="btn ghost">📥 Wczytaj zabawy
+          <input type="file" id="importGamesFile" accept="application/json" hidden />
+        </label>
+      </div>
+
+      <h4>Reset</h4>
+      <button class="btn ghost" id="resetBtn" style="color:var(--brand-3)">🗑️ Przywróć ustawienia domyślne</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PLAN DRAWER ===================== -->
+<div class="drawer" id="planDrawer">
+  <div class="drawer-head">
+    <h3>📋 Plan lekcji</h3>
+    <button class="close-x" style="background:var(--line);color:var(--ink)" id="closeDrawer">✕</button>
+  </div>
+  <div class="drawer-body" id="planBody"></div>
+  <div class="drawer-foot">
+    <button class="btn primary" id="printPlan" style="flex:1">🖨️ Drukuj / PDF</button>
+    <button class="btn ghost" id="clearPlan">Wyczyść</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   DANE STARTOWE — dodawaj kolejne zabawy tutaj lub przez formularz
+   ============================================================ */
+const CATEGORIES = [
+  {id:"warmup",   name:"Rozgrzewki",        emoji:"🔥", color:"#fd79a8"},
+  {id:"vocab",    name:"Słownictwo",        emoji:"🃏", color:"#6c5ce7"},
+  {id:"grammar",  name:"Gramatyka",         emoji:"🧩", color:"#0984e3"},
+  {id:"speaking", name:"Mówienie",          emoji:"🗣️", color:"#00b894"},
+  {id:"listening",name:"Słuchanie",         emoji:"👂", color:"#e17055"},
+  {id:"movement", name:"Ruchowe / TPR",     emoji:"🏃", color:"#fdcb6e"},
+  {id:"writing",  name:"Pisanie",           emoji:"✍️", color:"#a29bfe"},
+  {id:"filler",   name:"Wypełniacze czasu", emoji:"⏳", color:"#00cec9"},
+];
+
+const SEED = [
+  {
+    id:"which-missing",
+    emoji:"🫣",
+    title:"Which one is missing?",
+    category:"vocab",
+    excerpt:"Klasyczna zabawa z flashcards — dzieci odgadują, którego obrazka brakuje.",
+    levels:["A1","A2"],
+    ages:["Dzieci"],
+    skills:["Słownictwo","Pamięć"],
+    time:8,
+    materials:["Flashcards"],
+    steps:[
+      "Rozłóż flashcards na dywanie (lub przyczep na tablicy) tak, aby wszystkie dzieci je widziały. Nazwijcie wspólnie każdy obrazek.",
+      "Poproś dzieci, aby zamknęły oczy: „Close your eyes.”",
+      "Wypowiedz rymowankę i w tym czasie ukryj jeden obrazek: „Abracadabra, abracadabra, one, two, three… open your eyes!”",
+      "Zadaj pytanie: „Which one is missing?” Dzieci zgadują, którego obrazka brakuje.",
+      "Dziecko, które odgadnie, może zostać „czarodziejem” i chować kolejny obrazek."
+    ],
+    phrase:"Close your eyes. Abracadabra, abracadabra, one, two, three… open your eyes. Which one is missing?",
+    tip:"Utrudnienia: zabieraj 2–3 obrazki naraz, zamieniaj obrazki miejscami zamiast chować, albo dokładaj nowy obrazek i pytaj „Which one is NEW?”."
+  },
+  {
+    id:"hot-potato",
+    emoji:"🥔",
+    title:"Hot Potato (Gorący ziemniak)",
+    category:"vocab",
+    excerpt:"Podawajcie przedmiot w rytm muzyki — kto go trzyma, gdy muzyka cichnie, odpowiada.",
+    levels:["A1","A2","B1"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Słownictwo","Mówienie"],
+    time:10,
+    materials:["Piłka / maskotka","Muzyka"],
+    steps:[
+      "Uczniowie siedzą w kręgu. Włącz muzykę — dzieci podają sobie „gorący ziemniak” (piłkę).",
+      "Zatrzymaj muzykę. Uczeń trzymający piłkę losuje flashcard / odpowiada na pytanie / podaje słowo z kategorii.",
+      "Włącz muzykę ponownie i kontynuuj."
+    ],
+    phrase:"Pass the potato! Music stops — your turn!",
+    tip:"Zamiast eliminacji stosuj punkty za poprawną odpowiedź, żeby nikt nie odpadał z zabawy."
+  },
+  {
+    id:"running-dictation",
+    emoji:"🏃",
+    title:"Running Dictation",
+    category:"movement",
+    excerpt:"Bieg + czytanie + pisanie + współpraca w jednym — świetne na energię.",
+    levels:["A2","B1","B2"],
+    ages:["Nastolatki","Dorośli"],
+    skills:["Czytanie","Pisanie","Współpraca"],
+    time:15,
+    materials:["Wydrukowany tekst"],
+    steps:[
+      "Powieś krótki tekst na ścianie po drugiej stronie sali.",
+      "Uczniowie pracują w parach: „biegacz” biegnie, zapamiętuje fragment i dyktuje go „pisarzowi”.",
+      "Para zmienia się rolami. Wygrywa para z najwierniejszą kopią tekstu.",
+      "Na koniec porównajcie wersje z oryginałem — zwróć uwagę na pisownię i interpunkcję."
+    ],
+    tip:"Dla niższych poziomów użyj pojedynczych zdań lub podpisów do obrazków."
+  },
+  {
+    id:"board-race",
+    emoji:"🏁",
+    title:"Board Race",
+    category:"warmup",
+    excerpt:"Dwie drużyny, jedna tablica — kto zapisze więcej poprawnych słów?",
+    levels:["A1","A2","B1"],
+    ages:["Dzieci","Nastolatki"],
+    skills:["Słownictwo","Ortografia"],
+    time:8,
+    materials:["Tablica","Pisaki"],
+    steps:[
+      "Podziel klasę na 2 drużyny i tablicę na 2 części.",
+      "Podaj kategorię (np. „animals”, „food”, „irregular verbs”).",
+      "Uczniowie po kolei podbiegają i zapisują po jednym słowie w ustalonym czasie.",
+      "Liczą się tylko poprawnie zapisane słowa — punkt za każde."
+    ],
+    tip:"Wariant gramatyczny: drużyny zapisują poprawne formy czasu przeszłego podanych czasowników."
+  },
+  {
+    id:"20-questions",
+    emoji:"❓",
+    title:"20 Questions",
+    category:"speaking",
+    excerpt:"Zgadywanie przedmiotu/osoby przez pytania tak/nie — ćwiczy pytania i struktury.",
+    levels:["A2","B1","B2"],
+    ages:["Nastolatki","Dorośli"],
+    skills:["Mówienie","Gramatyka"],
+    time:10,
+    materials:[],
+    steps:[
+      "Jedna osoba myśli o przedmiocie, zwierzęciu lub osobie.",
+      "Reszta zadaje pytania zamknięte: „Is it an animal?”, „Can you eat it?”.",
+      "Cel: odgadnąć w maksymalnie 20 pytaniach.",
+      "Osoba, która zgadnie, wymyśla kolejne hasło."
+    ],
+    phrase:"Is it…? Can it…? Do you…? Yes, it is. / No, it isn't.",
+    tip:"Zapisz na tablicy strukturę pytań, aby wymusić poprawne budowanie question forms."
+  },
+  {
+    id:"back-to-board",
+    emoji:"🪑",
+    title:"Back to the Board",
+    category:"vocab",
+    excerpt:"Uczeń tyłem do tablicy zgaduje słowo, które opisuje reszta klasy.",
+    levels:["A2","B1","B2","C1"],
+    ages:["Nastolatki","Dorośli"],
+    skills:["Mówienie","Słownictwo","Definiowanie"],
+    time:12,
+    materials:["Tablica"],
+    steps:[
+      "Jeden uczeń siada tyłem do tablicy.",
+      "Napisz słowo na tablicy — reszta klasy je opisuje (bez wypowiadania!).",
+      "Uczeń zgaduje słowo na podstawie definicji i podpowiedzi.",
+      "Zmiana osoby na krześle."
+    ],
+    tip:"Świetne do powtórki słownictwa przed testem — używaj słów z ostatnich lekcji."
+  },
+];
+
+/* ============================================================
+   STAN + STORAGE
+   ============================================================ */
+const LS = {
+  fav:"ltt_favorites",
+  custom:"ltt_custom",
+  plan:"ltt_plan",
+  theme:"ltt_theme",
+  removed:"ltt_removed"
+};
+const load = (k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}};
+const save = (k,v)=>localStorage.setItem(k,JSON.stringify(v));
+
+let favorites = load(LS.fav,[]);
+let custom    = load(LS.custom,[]);
+let plan      = load(LS.plan,[]);
+let removed   = load(LS.removed,[]); // ukryte seedy
+
+let activeCat = "all";
+let activeView = "all";
+
+const $ = s=>document.querySelector(s);
+const $$ = s=>[...document.querySelectorAll(s)];
+
+function allActivities(){
+  const seeds = SEED.filter(s=>!removed.includes(s.id));
+  return [...seeds, ...custom];
+}
+const catById = id => CATEGORIES.find(c=>c.id===id) || {name:"Inne",emoji:"📌",color:"#888"};
+
+/* ============================================================
+   RENDER: pills + filtry
+   ============================================================ */
+function renderPills(){
+  const counts = {};
+  allActivities().forEach(a=>counts[a.category]=(counts[a.category]||0)+1);
+  let html = `<span class="pill ${activeCat==='all'?'active':''}" data-cat="all">🌈 Wszystkie</span>`;
+  CATEGORIES.forEach(c=>{
+    if(!counts[c.id]) return;
+    html += `<span class="pill ${activeCat===c.id?'active':''}" data-cat="${c.id}">${c.emoji} ${c.name} <b style="opacity:.6">${counts[c.id]}</b></span>`;
+  });
+  $("#catPills").innerHTML = html;
+  $$(".pill").forEach(p=>p.onclick=()=>{activeCat=p.dataset.cat;renderPills();render();});
+}
+
+function fillFilterOptions(){
+  const levels=new Set(),ages=new Set(),skills=new Set();
+  allActivities().forEach(a=>{
+    (a.levels||[]).forEach(x=>levels.add(x));
+    (a.ages||[]).forEach(x=>ages.add(x));
+    (a.skills||[]).forEach(x=>skills.add(x));
+  });
+  const fill=(sel,set,label)=>{
+    const cur=$(sel).value;
+    $(sel).innerHTML=`<option value="">${label}</option>`+[...set].sort().map(v=>`<option>${v}</option>`).join("");
+    $(sel).value=cur;
+  };
+  fill('[data-role="level"]',levels,"Poziom: wszystkie");
+  fill('[data-role="age"]',ages,"Wiek: każdy");
+  fill('[data-role="skill"]',skills,"Umiejętność: dowolna");
+  // fill category select in form
+  $("#f_category").innerHTML = CATEGORIES.map(c=>`<option value="${c.id}">${c.emoji} ${c.name}</option>`).join("");
+}
+
+/* ============================================================
+   RENDER: karty
+   ============================================================ */
+function render(){
+  const q = $("#search").value.trim().toLowerCase();
+  const fLevel = $('[data-role="level"]').value;
+  const fAge   = $('[data-role="age"]').value;
+  const fSkill = $('[data-role="skill"]').value;
+  const sort   = $("#sortBy").value;
+
+  let list = allActivities().filter(a=>{
+    if(activeView==="fav" && !favorites.includes(a.id)) return false;
+    if(activeCat!=="all" && a.category!==activeCat) return false;
+    if(fLevel && !(a.levels||[]).includes(fLevel)) return false;
+    if(fAge && !(a.ages||[]).includes(fAge)) return false;
+    if(fSkill && !(a.skills||[]).includes(fSkill)) return false;
+    if(q){
+      const hay=[a.title,a.excerpt,(a.skills||[]).join(" "),(a.levels||[]).join(" "),(a.materials||[]).join(" "),(a.steps||[]).join(" ")].join(" ").toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  list.sort((a,b)=>{
+    if(sort==="az")return a.title.localeCompare(b.title);
+    if(sort==="za")return b.title.localeCompare(a.title);
+    if(sort==="time")return (a.time||99)-(b.time||99);
+  });
+
+  const grid=$("#grid");
+  grid.innerHTML = list.map(a=>{
+    const c=catById(a.category);
+    const fav=favorites.includes(a.id);
+    return `<article class="card" data-id="${a.id}">
+      <div class="card-top">
+        <div class="card-emoji">${a.emoji||c.emoji}</div>
+        <button class="fav-btn ${fav?'on':''}" data-fav="${a.id}" title="Dodaj do ulubionych">⭐</button>
+      </div>
+      <div class="card-body">
+        <h3>${a.title}</h3>
+        <p class="excerpt">${a.excerpt||""}</p>
+        <div class="meta-row">
+          ${(a.levels||[]).slice(0,3).map(l=>`<span class="tag lvl">${l}</span>`).join("")}
+          ${a.time?`<span class="tag time">⏱ ${a.time} min</span>`:""}
+          ${(a.ages||[]).slice(0,1).map(g=>`<span class="tag age">${g}</span>`).join("")}
+        </div>
+      </div>
+      <div class="card-foot">
+        <span class="cat-dot"><span class="dot" style="background:${c.color}"></span>${c.name}</span>
+        <button class="plan-add" data-plan="${a.id}">${plan.includes(a.id)?'✓ w planie':'+ do planu'}</button>
+      </div>
+    </article>`;
+  }).join("");
+
+  $("#empty").style.display = list.length?"none":"block";
+  grid.style.display = list.length?"grid":"none";
+
+  // events
+  $$(".card").forEach(c=>c.addEventListener("click",e=>{
+    if(e.target.closest("[data-fav]")||e.target.closest("[data-plan]"))return;
+    openDetail(c.dataset.id);
+  }));
+  $$("[data-fav]").forEach(b=>b.onclick=()=>toggleFav(b.dataset.fav));
+  $$("[data-plan]").forEach(b=>b.onclick=()=>togglePlan(b.dataset.plan));
+
+  updateStats();
+}
+
+function updateStats(){
+  $("#statTotal").textContent=allActivities().length;
+  $("#statFav").textContent=favorites.length;
+  $("#statPlan").textContent=plan.length;
+  $("#planCount").textContent=plan.length;
+}
+
+/* ============================================================
+   ULUBIONE / PLAN
+   ============================================================ */
+function toggleFav(id){
+  favorites.includes(id)?favorites=favorites.filter(x=>x!==id):favorites.push(id);
+  save(LS.fav,favorites);render();
+  toast(favorites.includes(id)?"⭐ Dodano do ulubionych":"Usunięto z ulubionych");
+}
+function togglePlan(id){
+  plan.includes(id)?plan=plan.filter(x=>x!==id):plan.push(id);
+  save(LS.plan,plan);render();renderPlan();
+  toast(plan.includes(id)?"📋 Dodano do planu lekcji":"Usunięto z planu");
+}
+
+/* ============================================================
+   MODAL: szczegóły
+   ============================================================ */
+function findActivity(id){return allActivities().find(a=>a.id===id)}
+function openDetail(id){
+  const a=findActivity(id);if(!a)return;
+  const c=catById(a.category);
+  const isCustom=custom.some(x=>x.id===id);
+  $("#detailModal").innerHTML=`
+    <div class="modal-head" style="background:linear-gradient(135deg,${c.color},${c.color}cc)">
+      <button class="close-x" data-close="detail">✕</button>
+      <div class="m-emoji">${a.emoji||c.emoji}</div>
+      <h2>${a.title}</h2>
+      <div class="m-meta">
+        <span class="tag">${c.emoji} ${c.name}</span>
+        ${(a.levels||[]).map(l=>`<span class="tag">${l}</span>`).join("")}
+        ${a.time?`<span class="tag">⏱ ${a.time} min</span>`:""}
+        ${(a.ages||[]).map(g=>`<span class="tag">${g}</span>`).join("")}
+      </div>
+    </div>
+    <div class="modal-content">
+      ${a.excerpt?`<p style="font-size:1.05rem;color:var(--ink-soft)">${a.excerpt}</p>`:""}
+      ${(a.skills&&a.skills.length)?`<h4>Ćwiczone umiejętności</h4><div class="meta-row">${a.skills.map(s=>`<span class="tag">${s}</span>`).join("")}</div>`:""}
+      ${(a.materials&&a.materials.length)?`<h4>Materiały</h4><div class="meta-row">${a.materials.map(m=>`<span class="tag">📦 ${m}</span>`).join("")}</div>`:""}
+      ${(a.steps&&a.steps.length)?`<h4>Jak przeprowadzić</h4><ol class="steps">${a.steps.map(s=>`<li>${s}</li>`).join("")}</ol>`:""}
+      ${a.phrase?`<h4>Zwroty dla nauczyciela</h4><div class="phrase">💬 ${a.phrase}</div>`:""}
+      ${a.tip?`<h4>Wskazówka / warianty</h4><div class="callout">💡 ${a.tip}</div>`:""}
+      <div class="modal-foot">
+        <button class="btn primary" data-plan-modal="${a.id}">${plan.includes(a.id)?'✓ W planie lekcji':'📋 Dodaj do planu'}</button>
+        <button class="btn ghost" data-fav-modal="${a.id}">${favorites.includes(a.id)?'⭐ W ulubionych':'☆ Do ulubionych'}</button>
+        <button class="btn ghost" data-dup="${a.id}">📄 Duplikuj</button>
+        ${isCustom?`<button class="btn ghost" data-edit="${a.id}">✏️ Edytuj</button>
+        <button class="btn ghost" style="color:var(--brand-3)" data-del="${a.id}">🗑️ Usuń</button>`:
+        `<button class="btn ghost" style="color:var(--brand-3)" data-hide="${a.id}">🙈 Ukryj</button>`}
+      </div>
+    </div>`;
+  openOverlay("detail");
+  $("[data-plan-modal]").onclick=()=>{togglePlan(a.id);openDetail(a.id)};
+  $("[data-fav-modal]").onclick=()=>{toggleFav(a.id);openDetail(a.id)};
+  $("[data-dup]").onclick=()=>{
+    closeOverlay("detail");
+    openForm(); // pusty formularz...
+    $("#f_emoji").value=a.emoji||"";
+    $("#f_category").value=a.category;
+    $("#f_title").value=a.title+" (kopia)";
+    $("#f_excerpt").value=a.excerpt||"";
+    $("#f_levels").value=(a.levels||[]).join(", ");
+    $("#f_ages").value=(a.ages||[]).join(", ");
+    $("#f_skills").value=(a.skills||[]).join(", ");
+    $("#f_time").value=a.time||"";
+    $("#f_materials").value=(a.materials||[]).join(", ");
+    $("#f_steps").value=(a.steps||[]).join("\n");
+    $("#f_phrase").value=a.phrase||"";
+    $("#f_tip").value=a.tip||"";
+    toast("Wypełnij i zapisz jako nową zabawę");
+  };
+  const ed=$("[data-edit]");if(ed)ed.onclick=()=>{closeOverlay("detail");openForm(a.id)};
+  const del=$("[data-del]");if(del)del.onclick=()=>{
+    if(confirm("Usunąć tę zabawę?")){custom=custom.filter(x=>x.id!==a.id);save(LS.custom,custom);closeOverlay("detail");refresh();toast("Usunięto zabawę")}
+  };
+  const hide=$("[data-hide]");if(hide)hide.onclick=()=>{
+    removed.push(a.id);save(LS.removed,removed);closeOverlay("detail");refresh();toast("Ukryto zabawę (przywrócisz w Kopii → Reset)")
+  };
+}
+
+/* ============================================================
+   MODAL: formularz dodawania / edycji
+   ============================================================ */
+let editingId=null;
+function openForm(id){
+  editingId=id||null;
+  $("#formTitle").textContent=id?"Edytuj zabawę":"Dodaj nową zabawę";
+  const a=id?findActivity(id):{};
+  $("#f_emoji").value=a.emoji||"";
+  $("#f_category").value=a.category||CATEGORIES[0].id;
+  $("#f_title").value=a.title||"";
+  $("#f_excerpt").value=a.excerpt||"";
+  $("#f_levels").value=(a.levels||[]).join(", ");
+  $("#f_ages").value=(a.ages||[]).join(", ");
+  $("#f_skills").value=(a.skills||[]).join(", ");
+  $("#f_time").value=a.time||"";
+  $("#f_materials").value=(a.materials||[]).join(", ");
+  $("#f_steps").value=(a.steps||[]).join("\n");
+  $("#f_phrase").value=a.phrase||"";
+  $("#f_tip").value=a.tip||"";
+  openOverlay("form");
+}
+const splitList=v=>v.split(/[,\n]/).map(x=>x.trim()).filter(Boolean);
+function saveActivity(){
+  const title=$("#f_title").value.trim();
+  if(!title){toast("Podaj nazwę zabawy");return}
+  const obj={
+    id: editingId || ("c-"+title.toLowerCase().replace(/[^a-z0-9]+/g,"-").slice(0,30)+"-"+String(favorites.length+custom.length+Date.now()%10000)),
+    emoji:$("#f_emoji").value.trim()||"🎯",
+    title,
+    category:$("#f_category").value,
+    excerpt:$("#f_excerpt").value.trim(),
+    levels:splitList($("#f_levels").value),
+    ages:splitList($("#f_ages").value),
+    skills:splitList($("#f_skills").value),
+    time:parseInt($("#f_time").value)||null,
+    materials:splitList($("#f_materials").value),
+    steps:$("#f_steps").value.split("\n").map(x=>x.trim()).filter(Boolean),
+    phrase:$("#f_phrase").value.trim(),
+    tip:$("#f_tip").value.trim(),
+  };
+  if(editingId){custom=custom.map(x=>x.id===editingId?obj:x)}
+  else{custom.push(obj)}
+  save(LS.custom,custom);
+  closeOverlay("form");refresh();
+  toast(editingId?"✅ Zaktualizowano":"✅ Dodano nową zabawę");
+}
+
+/* ============================================================
+   PLAN LEKCJI (drawer + druk)
+   ============================================================ */
+function renderPlan(){
+  const body=$("#planBody");
+  if(!plan.length){body.innerHTML=`<div style="color:var(--ink-soft);text-align:center;padding:40px 0">Pusto tutaj.<br>Dodaj zabawy przyciskiem „+ do planu”.</div>`;return}
+  let total=0;
+  body.innerHTML=plan.map(id=>{
+    const a=findActivity(id);if(!a)return"";
+    total+=a.time||0;
+    const c=catById(a.category);
+    return `<div class="plan-item">
+      <span class="pi-emoji">${a.emoji||c.emoji}</span>
+      <div><h5>${a.title}</h5><small>${c.name}${a.time?` · ${a.time} min`:""}</small></div>
+      <button class="rm" data-rmplan="${id}">✕</button>
+    </div>`;
+  }).join("")+`<div style="text-align:center;margin-top:12px;font-weight:800">Łączny czas: ~${total} min</div>`;
+  $$("[data-rmplan]").forEach(b=>b.onclick=()=>togglePlan(b.dataset.rmplan));
+}
+function printPlan(){
+  if(!plan.length){toast("Plan jest pusty");return}
+  let total=0;
+  const rows=plan.map((id,i)=>{
+    const a=findActivity(id);if(!a)return"";
+    total+=a.time||0;const c=catById(a.category);
+    return `<div style="border:1px solid #ddd;border-radius:10px;padding:14px;margin-bottom:12px">
+      <h3 style="margin:0 0 4px">${i+1}. ${a.emoji||""} ${a.title}</h3>
+      <p style="margin:0;color:#666"><b>${c.name}</b>${a.time?` · ${a.time} min`:""} · ${(a.levels||[]).join(", ")} · ${(a.ages||[]).join(", ")}</p>
+      ${a.materials&&a.materials.length?`<p style="margin:6px 0 0"><b>Materiały:</b> ${a.materials.join(", ")}</p>`:""}
+      ${a.steps&&a.steps.length?`<ol style="margin:8px 0 0">${a.steps.map(s=>`<li>${s}</li>`).join("")}</ol>`:""}
+      ${a.phrase?`<p style="margin:6px 0 0"><b>Zwroty:</b> <i>${a.phrase}</i></p>`:""}
+    </div>`;
+  }).join("");
+  const w=window.open("","_blank");
+  w.document.write(`<html><head><title>Plan lekcji</title><meta charset="utf-8"><style>body{font-family:Segoe UI,Arial,sans-serif;max-width:760px;margin:24px auto;padding:0 16px;color:#222}h1{color:#6c5ce7}li{margin:3px 0}</style></head>
+  <body><h1>📋 Plan lekcji</h1><p style="color:#666">Łączny czas: ~${total} min · ${plan.length} aktywności</p>${rows}
+  <p style="margin-top:30px;color:#999;font-size:.85rem">Wygenerowano w Language Teacher's Toolbox</p></body></html>`);
+  w.document.close();w.print();
+}
+
+/* ============================================================
+   OVERLAYE / POMOCNICZE
+   ============================================================ */
+function openOverlay(k){$("#"+k+"Overlay").classList.add("open")}
+function closeOverlay(k){$("#"+k+"Overlay").classList.remove("open")}
+$$("[data-close]").forEach(b=>b.onclick=()=>closeOverlay(b.dataset.close));
+$$(".modal-overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o)o.classList.remove("open")}));
+
+function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),1900)}
+
+function refresh(){renderPills();fillFilterOptions();render();renderPlan()}
+
+/* ============================================================
+   EVENTY GŁÓWNE
+   ============================================================ */
+$("#search").addEventListener("input",render);
+$$('[data-role]').forEach(s=>s.onchange=render);
+$("#sortBy").onchange=render;
+$$(".view-tabs button").forEach(b=>b.onclick=()=>{
+  $$(".view-tabs button").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");activeView=b.dataset.view;render();
+});
+$("#addBtn").onclick=()=>openForm();
+$("#saveActivity").onclick=saveActivity;
+$("#randomBtn").onclick=()=>{
+  const list=allActivities();if(!list.length)return;
+  openDetail(list[Math.floor(Math.random()*list.length)].id);
+};
+$("#ioBtn").onclick=()=>openOverlay("io");
+$("#themeBtn").onclick=()=>{
+  const cur=document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark";
+  document.documentElement.setAttribute("data-theme",cur);save(LS.theme,cur);
+  $("#themeBtn").textContent=cur==="dark"?"☀️":"🌙";
+};
+
+/* Plan drawer */
+$("#planFab").onclick=()=>{$("#planDrawer").classList.add("open");renderPlan()};
+$("#closeDrawer").onclick=()=>$("#planDrawer").classList.remove("open");
+$("#printPlan").onclick=printPlan;
+$("#clearPlan").onclick=()=>{if(confirm("Wyczyścić cały plan?")){plan=[];save(LS.plan,plan);refresh();}};
+
+/* Import / Export / Reset */
+function downloadJSON(obj,filename){
+  const blob=new Blob([JSON.stringify(obj,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);const a=document.createElement("a");
+  a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url);
+}
+function readJSONFile(input,cb){
+  const file=input.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=()=>{try{cb(JSON.parse(r.result))}catch{toast("❌ Nieprawidłowy plik JSON")}};
+  r.readAsText(file);
+  input.value="";
+}
+// scala listę zabaw po id (nowe id -> dołącz, istniejące -> pomiń, aby nie nadpisać)
+function mergeGames(incoming){
+  let added=0;
+  (incoming||[]).forEach(g=>{
+    if(!g||!g.title)return;
+    if(!g.id) g.id="c-imp-"+Date.now()+"-"+added;
+    if(custom.some(x=>x.id===g.id)){ g.id=g.id+"-"+(Date.now()%100000) } // konflikt id -> nowe
+    custom.push(g);added++;
+  });
+  return added;
+}
+
+/* --- pełna kopia --- */
+$("#exportBtn").onclick=()=>{
+  downloadJSON({type:"ltt-backup",favorites,custom,plan,removed,exportedAt:new Date().toISOString()},"teacher-toolbox-kopia.json");
+  toast("💾 Pobrano pełną kopię");
+};
+$("#importFile").onchange=e=>readJSONFile(e.target,d=>{
+  const games=d.custom||d.games||[];
+  const replace=confirm("Kliknij OK, aby ZASTĄPIĆ obecne dane wczytanymi.\nKliknij Anuluj, aby SCALIĆ (zachować obecne i dodać nowe).");
+  if(replace){
+    favorites=d.favorites||[];custom=games;plan=d.plan||[];removed=d.removed||[];
+    save(LS.fav,favorites);save(LS.custom,custom);save(LS.plan,plan);save(LS.removed,removed);
+    toast("✅ Zastąpiono dane kopią");
+  }else{
+    const n=mergeGames(games);
+    (d.favorites||[]).forEach(x=>{if(!favorites.includes(x))favorites.push(x)});
+    save(LS.custom,custom);save(LS.fav,favorites);
+    toast(`✅ Scalono — dodano ${n} zabaw`);
+  }
+  closeOverlay("io");refresh();
+});
+
+/* --- tylko własne zabawy (do dzielenia się) --- */
+$("#exportGamesBtn").onclick=()=>{
+  if(!custom.length){toast("Nie masz jeszcze własnych zabaw");return}
+  downloadJSON({type:"ltt-games",games:custom,count:custom.length,exportedAt:new Date().toISOString()},"moje-zabawy.json");
+  toast(`🎁 Wyeksportowano ${custom.length} zabaw`);
+};
+$("#importGamesFile").onchange=e=>readJSONFile(e.target,d=>{
+  const games=d.games||d.custom||(Array.isArray(d)?d:null);
+  if(!games){toast("❌ Plik nie zawiera zabaw");return}
+  const n=mergeGames(games);
+  save(LS.custom,custom);closeOverlay("io");refresh();
+  toast(`📥 Dodano ${n} zabaw`);
+});
+$("#resetBtn").onclick=()=>{
+  if(confirm("Przywrócić ustawienia domyślne? Usunie to Twoje ulubione, plan i własne zabawy.")){
+    favorites=[];custom=[];plan=[];removed=[];
+    [LS.fav,LS.custom,LS.plan,LS.removed].forEach(k=>localStorage.removeItem(k));
+    closeOverlay("io");refresh();toast("Przywrócono domyślne");
+  }
+};
+
+/* ESC zamyka */
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){$$(".modal-overlay").forEach(o=>o.classList.remove("open"));$("#planDrawer").classList.remove("open")}
+});
+
+/* INIT */
+(function init(){
+  const t=load(LS.theme,"light");
+  document.documentElement.setAttribute("data-theme",t);
+  $("#themeBtn").textContent=t==="dark"?"☀️":"🌙";
+  refresh();
+})();
+</script>
+</body>
+</html>
