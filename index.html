@@ -321,10 +321,37 @@
   .tag-input{display:flex;gap:8px;margin-top:8px}
   .tag-input input{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:8px 10px}
 
+  /* ---------- MAIN TABS ---------- */
+  .main-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+  .main-tabs .mtab{border:1px solid var(--line);background:var(--bg-soft);color:var(--ink-soft);font-weight:800;font-size:.95rem;padding:11px 20px;border-radius:14px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.18s}
+  .main-tabs .mtab.active{background:var(--brand);color:#fff;border-color:var(--brand);box-shadow:var(--shadow-sm)}
+  .main-tabs .mtab:hover{transform:translateY(-1px)}
+
+  /* ---------- PHRASEBOOK ---------- */
+  .phrase-cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .phrase-group{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);margin-bottom:16px;overflow:hidden}
+  .phrase-head{display:flex;align-items:center;gap:10px;padding:13px 18px;background:linear-gradient(135deg,rgba(108,92,231,.12),rgba(0,184,148,.08));border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2;backdrop-filter:blur(4px)}
+  .phrase-head .pe{font-size:22px}
+  .phrase-head h3{margin:0;font-size:1.05rem}
+  .phrase-head .cnt{margin-left:auto;font-size:.78rem;color:var(--ink-soft);font-weight:800;background:var(--bg);padding:3px 9px;border-radius:999px}
+  .phrase-row{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:center;padding:10px 18px;border-bottom:1px dashed var(--line)}
+  .phrase-row:last-child{border-bottom:none}
+  .phrase-row:hover{background:var(--bg)}
+  .phrase-row .en{font-weight:600}
+  .phrase-row .pl{color:var(--ink-soft)}
+  .phrase-row .acts{display:flex;gap:6px}
+  .phrase-row .pbtn{border:none;background:var(--bg);color:var(--ink-soft);width:32px;height:32px;border-radius:9px;cursor:pointer;font-size:.9rem;transition:.15s;flex:none}
+  .phrase-row .pbtn:hover{background:var(--brand);color:#fff}
+  .phrase-empty{text-align:center;padding:60px 20px;color:var(--ink-soft)}
+
   @media(max-width:640px){
     .form-grid{grid-template-columns:1fr}
     .logo h1{font-size:1.25rem}
     .timer-display{font-size:34vw}
+    .phrase-row{grid-template-columns:1fr auto}
+    .phrase-row .en{grid-column:1;grid-row:1}
+    .phrase-row .pl{grid-column:1;grid-row:2}
+    .phrase-row .acts{grid-column:2;grid-row:1/3;align-self:center}
   }
 </style>
 </head>
@@ -367,6 +394,12 @@
 
 <!-- ===================== MAIN ===================== -->
 <main class="wrap">
+  <div class="main-tabs">
+    <button class="mtab active" data-main="games">🎲 Zabawy i gry</button>
+    <button class="mtab" data-main="phrases">💬 Zwroty na lekcji</button>
+  </div>
+
+  <div id="gamesView">
   <div class="cat-pills" id="catPills"></div>
 
   <div class="toolbar">
@@ -397,6 +430,13 @@
     <div class="big">🔎</div>
     <h3>Brak wyników</h3>
     <p>Zmień filtry lub wyszukaj inne słowo. Możesz też dodać własną zabawę przyciskiem „➕ Dodaj zabawę”.</p>
+  </div>
+  </div><!-- /gamesView -->
+
+  <div id="phrasesView" style="display:none">
+    <p style="color:var(--ink-soft);margin:-4px 0 16px">Gotowe zwroty i wyrażenia do prowadzenia lekcji po angielsku, z tłumaczeniem. Kliknij 🔊, aby usłyszeć wymowę, lub 📋, aby skopiować.</p>
+    <div class="phrase-cats" id="phraseCats"></div>
+    <div id="phraseList"></div>
   </div>
 </main>
 
@@ -4619,6 +4659,625 @@ const SEED = [
 ];
 
 /* ============================================================
+   ZWROTY NA LEKCJI (phrasebook)
+   ============================================================ */
+const PHRASE_CATS = [
+  {id:"start",     name:"Początek lekcji",      emoji:"👋"},
+  {id:"commands",  name:"Polecenia i instrukcje",emoji:"📋"},
+  {id:"end",       name:"Koniec lekcji",         emoji:"🔔"},
+  {id:"manage",    name:"Zarządzanie klasą",     emoji:"🧑‍🏫"},
+  {id:"explain",   name:"Wyjaśnianie",           emoji:"💡"},
+  {id:"correct",   name:"Ocena i poprawianie",   emoji:"✅"},
+  {id:"student",   name:"Uczeń",                 emoji:"🙋"},
+  {id:"group",     name:"Praca w grupie",        emoji:"👥"},
+  {id:"online",    name:"Lekcja online",         emoji:"💻"},
+  {id:"discipline",name:"Dyscyplina",            emoji:"🤫"},
+  {id:"social",    name:"Grzeczność i okazje",   emoji:"🎉"},
+];
+
+const PHRASES = [
+  {cat:"start", title:"Powitanie", items:[
+    ["Good morning, everybody","Dzień dobry wszystkim"],
+    ["Good afternoon, everybody","Dzień dobry wszystkim (po południu)"],
+    ["Hello, everyone","Cześć wszystkim"],
+    ["Hello there, James","Cześć, James"],
+  ]},
+  {cat:"start", title:"Przedstawianie się", items:[
+    ["My name is Mr/Mrs/Ms Pitts","Nazywam się pan / pani Pitts"],
+    ["I'm your new English teacher","Jestem waszym nowym nauczycielem angielskiego"],
+    ["I'll be teaching you English this year","W tym roku będę uczyć was angielskiego"],
+    ["I've got two lessons with you each week","Mam z wami dwie lekcje w tygodniu"],
+  ]},
+  {cat:"start", title:"Czekanie na rozpoczęcie", items:[
+    ["I'm waiting for you to be quiet","Czekam, aż się uciszycie"],
+    ["We won't start until everyone is quiet","Nie zaczniemy, dopóki wszyscy się nie uciszą"],
+    ["Stop talking and be quiet","Przestańcie rozmawiać i uciszcie się"],
+    ["Settle down now so we can start","Uspokójcie się, żebyśmy mogli zacząć"],
+  ]},
+  {cat:"start", title:"Sprawdzanie obecności", items:[
+    ["Who is absent today?","Kogo dziś nie ma?"],
+    ["Who isn't here today?","Kogo dziś nie ma?"],
+    ["What's the matter with Jenny today?","Co się dziś dzieje z Jenny?"],
+    ["What's wrong with Jenny today?","Co się dziś dzieje z Jenny?"],
+    ["Why were you absent last Friday, Jenny?","Dlaczego byłaś nieobecna w zeszły piątek, Jenny?"],
+    ["For how long have you been ill, Jenny?","Jak długo chorowałaś, Jenny?"],
+  ]},
+  {cat:"start", title:"Jak się masz?", items:[
+    ["How are you today, Jenny?","Jak się dziś masz, Jenny?"],
+    ["How are you getting on?","Jak ci idzie?"],
+    ["How's life?","Co słychać?"],
+    ["How are things with you, Jenny?","Jak się sprawy mają, Jenny?"],
+    ["Are you feeling better today, Jenny?","Czujesz się dziś lepiej, Jenny?"],
+  ]},
+  {cat:"start", title:"Czas zacząć", items:[
+    ["Let's begin our lesson now","Zacznijmy teraz naszą lekcję"],
+    ["Is everybody ready to start?","Czy wszyscy są gotowi zacząć?"],
+    ["I hope you are all ready for your English lesson","Mam nadzieję, że wszyscy jesteście gotowi na lekcję angielskiego"],
+    ["I think we can start now","Myślę, że możemy już zacząć"],
+    ["Now we can get down to work","Teraz możemy zabrać się do pracy"],
+  ]},
+  {cat:"start", title:"Schowajcie rzeczy", items:[
+    ["Close your books","Zamknijcie książki"],
+    ["Put your books away","Schowajcie książki"],
+    ["Pack your things away","Spakujcie swoje rzeczy"],
+    ["Clear your tables, please","Uprzątnijcie stoliki, proszę"],
+  ]},
+  {cat:"start", title:"Spóźnienie", items:[
+    ["Where have you been?","Gdzie byłeś?"],
+    ["We started ten minutes ago. What have you been doing?","Zaczęliśmy dziesięć minut temu. Co robiłeś?"],
+    ["Did you miss your bus?","Spóźniłeś się na autobus?"],
+    ["Did you oversleep?","Zaspałeś?"],
+    ["Don't let it happen again","Niech to się więcej nie powtórzy"],
+  ]},
+
+  {cat:"commands", title:"Proste polecenia", items:[
+    ["Come in","Wejdźcie"],
+    ["Go out","Wyjdźcie"],
+    ["Stand up","Wstańcie"],
+    ["Sit down","Usiądźcie"],
+    ["Come to the front of the class","Wyjdźcie na środek / przed klasę"],
+    ["Stand by your desks","Stańcie przy swoich ławkach"],
+    ["Put your hands up","Podnieście ręce"],
+    ["Put your hands down","Opuśćcie ręce"],
+    ["Hold up your books / pencils","Podnieście do góry książki / ołówki"],
+    ["Show me your pencil","Pokaż mi swój ołówek"],
+    ["Could you sit up, please?","Czy mógłbyś usiąść prosto?"],
+  ]},
+  {cat:"commands", title:"Polecenia na początek zajęć", items:[
+    ["Pay attention, please","Uważajcie, proszę"],
+    ["You need pencils / rulers","Potrzebujecie ołówków / linijek"],
+    ["We'll learn how to…","Nauczymy się, jak…"],
+    ["Are you ready?","Jesteście gotowi?"],
+    ["Open your books at page…","Otwórzcie książki na stronie…"],
+    ["Turn to page…","Przejdźcie na stronę…"],
+    ["Look at activity five","Spójrzcie na ćwiczenie piąte"],
+    ["Listen to the CD player","Posłuchajcie płyty CD"],
+    ["Repeat after me","Powtarzajcie za mną"],
+    ["Again, please","Jeszcze raz, proszę"],
+    ["Everybody…","Wszyscy…"],
+    ["You have ten minutes to do this","Macie na to dziesięć minut"],
+    ["Who's next?","Kto następny?"],
+    ["Like this, not like that","Tak, a nie tak"],
+  ]},
+  {cat:"commands", title:"Kolejność czynności", items:[
+    ["First","Najpierw"],
+    ["Next","Następnie"],
+    ["After that","Potem"],
+    ["Then","Później / Wtedy"],
+    ["Finally","Na koniec"],
+  ]},
+  {cat:"commands", title:"Sprawdzanie zrozumienia", items:[
+    ["Are you with me?","Nadążacie za mną?"],
+    ["Are you OK?","Wszystko w porządku?"],
+    ["OK so far?","Na razie wszystko jasne?"],
+    ["Do you get it?","Rozumiecie?"],
+    ["Do you understand?","Rozumiecie?"],
+    ["What did you say?","Co powiedziałeś?"],
+    ["One more time, please","Jeszcze raz, proszę"],
+    ["Say it again, please","Powtórz to, proszę"],
+    ["Is this OK?","Czy tak jest dobrze?"],
+    ["Splendid!","Wspaniale!"],
+  ]},
+  {cat:"commands", title:"Kierowanie uwagą", items:[
+    ["All the boys","Wszyscy chłopcy"],
+    ["All the girls","Wszystkie dziewczynki"],
+    ["All together","Wszyscy razem"],
+    ["For example…","Na przykład…"],
+    ["Is this clear?","Czy to jasne?"],
+    ["Look at the blackboard","Spójrzcie na tablicę"],
+    ["Look at the screen","Spójrzcie na ekran"],
+    ["Answer the question","Odpowiedzcie na pytanie"],
+    ["Look at the top / middle / bottom of page…","Spójrzcie na górę / środek / dół strony…"],
+    ["Once more…","Jeszcze raz…"],
+  ]},
+  {cat:"commands", title:"Pisanie i praca z materiałami", items:[
+    ["Close your notebooks","Zamknijcie zeszyty"],
+    ["Open your notebooks","Otwórzcie zeszyty"],
+    ["Open your workbooks at page…","Otwórzcie ćwiczenia na stronie…"],
+    ["Copy down the examples in your notebooks","Przepiszcie przykłady do zeszytów"],
+    ["Write","Piszcie"],
+    ["Continue…","Kontynuujcie…"],
+    ["Repeat once more","Powtórzcie jeszcze raz"],
+    ["It's…'s turn","Teraz kolej…"],
+    ["Go to the blackboard","Podejdź do tablicy"],
+    ["Write the answer on the blackboard","Napisz odpowiedź na tablicy"],
+    ["Play the role of…","Zagraj rolę…"],
+    ["Look it up in the dictionary","Sprawdź to w słowniku"],
+  ]},
+
+  {cat:"end", title:"Czas kończyć", items:[
+    ["It's almost time to stop","Już prawie czas kończyć"],
+    ["I'm afraid it's time to stop","Obawiam się, że czas kończyć"],
+    ["We'll have to stop here","Musimy tu skończyć"],
+    ["There's the bell. It's time to stop","Dzwonek. Czas kończyć"],
+    ["That's it for today. You can go now","To wszystko na dziś. Możecie już iść"],
+    ["It's time to finish","Czas kończyć"],
+    ["Have you finished?","Skończyliście?"],
+    ["Let's stop now","Skończmy już"],
+    ["Let's call it a day","Na dziś wystarczy"],
+    ["Let's check the answers. Any questions?","Sprawdźmy odpowiedzi. Jakieś pytania?"],
+  ]},
+  {cat:"end", title:"Chwileczkę", items:[
+    ["Hang on a moment","Zaczekajcie chwilę"],
+    ["Just hold on a moment","Poczekajcie chwileczkę"],
+    ["Stay where you are for a moment","Zostańcie chwilę na miejscach"],
+    ["Just a moment, please","Chwileczkę, proszę"],
+    ["One more thing before…","Jeszcze jedno, zanim…"],
+    ["Back to your places","Wróćcie na swoje miejsca"],
+  ]},
+  {cat:"end", title:"Zadanie domowe", items:[
+    ["This is your homework for tonight","To wasze zadanie domowe na dziś"],
+    ["Do exercise 10 on page 23 for your homework","Zróbcie ćwiczenie 10 na stronie 23 jako zadanie domowe"],
+    ["Prepare the next chapter for Monday","Przygotujcie następny rozdział na poniedziałek"],
+    ["There is no homework tonight","Dziś nie ma zadania domowego"],
+    ["Remember your homework","Pamiętajcie o zadaniu domowym"],
+    ["Take a worksheet as you leave","Weźcie kartę pracy przy wyjściu"],
+    ["Pack up your books","Spakujcie książki"],
+    ["Don't forget to bring your… tomorrow","Nie zapomnijcie jutro przynieść…"],
+    ["Get your books from the locker","Weźcie książki z szafki"],
+  ]},
+  {cat:"end", title:"Wychodzenie z sali", items:[
+    ["Get into a queue","Ustawcie się w kolejce"],
+    ["Form a queue and wait for the bell","Ustawcie się w kolejce i czekajcie na dzwonek"],
+    ["All of you, get outside now!","Wszyscy, wychodźcie na zewnątrz!"],
+    ["Hurry up and get outside","Pospieszcie się i wyjdźcie na zewnątrz"],
+    ["Try not to make any noise as you leave","Starajcie się nie hałasować przy wychodzeniu"],
+    ["Be quiet as you leave. Other classes are still working","Bądźcie cicho, gdy wychodzicie. Inne klasy jeszcze pracują"],
+  ]},
+  {cat:"end", title:"Jeszcze nie koniec", items:[
+    ["The bell hasn't gone yet","Dzwonek jeszcze nie zadzwonił"],
+    ["There are still two minutes to go","Zostały jeszcze dwie minuty"],
+    ["We still have a couple of minutes left","Mamy jeszcze kilka minut"],
+    ["We seem to have finished early","Chyba skończyliśmy wcześniej"],
+    ["The lesson does not finish till five past","Lekcja kończy się dopiero pięć po"],
+    ["Your watch must be fast","Twój zegarek chyba się spieszy"],
+    ["We have an extra five minutes","Mamy dodatkowe pięć minut"],
+    ["Sit quietly till the bell goes","Siedźcie cicho, aż zadzwoni dzwonek"],
+  ]},
+  {cat:"end", title:"Następnym razem", items:[
+    ["We'll do the rest of this chapter next time","Resztę tego rozdziału zrobimy następnym razem"],
+    ["We'll finish this exercise next lesson","Dokończymy to ćwiczenie na następnej lekcji"],
+    ["We've run out of time, so we'll continue next lesson","Skończył nam się czas, więc będziemy kontynuować na następnej lekcji"],
+    ["We'll continue this chapter next Monday","Będziemy kontynuować ten rozdział w przyszły poniedziałek"],
+  ]},
+  {cat:"end", title:"Pożegnanie", items:[
+    ["Goodbye, everyone","Do widzenia wszystkim"],
+    ["See you again next Wednesday","Do zobaczenia w przyszłą środę"],
+    ["See you later, friends","Do zobaczenia później, przyjaciele"],
+    ["See you tomorrow afternoon","Do zobaczenia jutro po południu"],
+    ["Have a good holiday","Udanych wakacji / miłych świąt"],
+    ["Enjoy your vacation","Miłych wakacji"],
+    ["See you in room 7 after the break","Do zobaczenia w sali 7 po przerwie"],
+  ]},
+
+  {cat:"manage", title:"Ustawianie ławek i grup", items:[
+    ["Make groups of four","Utwórzcie grupy czteroosobowe"],
+    ["Move your desks into groups of four people","Zsuńcie ławki w grupy po cztery osoby"],
+    ["Turn your desks around","Obróćcie ławki"],
+    ["Make a circle with your desks","Ustawcie ławki w krąg"],
+    ["Make a line of desks facing each other","Ustawcie ławki w rząd naprzeciw siebie"],
+    ["Sit back to back","Usiądźcie plecami do siebie"],
+    ["Make a horseshoe shape with your desks","Ustawcie ławki w podkowę"],
+    ["Find a partner","Znajdźcie partnera"],
+    ["Please form pairs / pair off","Dobierzcie się w pary"],
+    ["Work in pairs / threes / fours / fives","Pracujcie w parach / trójkach / czwórkach / piątkach"],
+    ["Work in groups of three / four / five","Pracujcie w grupach po trzy / cztery / pięć osób"],
+    ["Make two teams","Utwórzcie dwie drużyny"],
+    ["Everybody work individually","Wszyscy pracują samodzielnie"],
+    ["Work on your own","Pracujcie samodzielnie"],
+    ["Work independently","Pracujcie niezależnie"],
+    ["Ask your neighbour for help","Poproś sąsiada o pomoc"],
+    ["There are too many in this group","W tej grupie jest za dużo osób"],
+    ["Can you join the other group?","Czy możesz dołączyć do drugiej grupy?"],
+    ["Stand up and find another partner","Wstańcie i znajdźcie nowego partnera"],
+    ["Push your chairs (under the table)","Wsuńcie krzesła (pod stół)"],
+  ]},
+  {cat:"manage", title:"Wydawanie poleceń", items:[
+    ["Could you try the next one?","Czy mógłbyś spróbować następnego?"],
+    ["I would like you to write this down","Chciałbym, żebyście to zapisali"],
+    ["Who would like to read?","Kto chciałby czytać?"],
+    ["Do you want to answer question 5?","Czy chcesz odpowiedzieć na pytanie 5?"],
+    ["Look this way","Patrzcie tutaj"],
+    ["Please switch on the lights","Włączcie światło, proszę"],
+    ["Could you open the window for me, please?","Czy mógłbyś otworzyć okno, proszę?"],
+    ["Whose turn is it to read?","Czyja kolej czytać?"],
+    ["Which question are you on?","Przy którym pytaniu jesteś?"],
+    ["Next one, please","Następny / następne, proszę"],
+    ["Who hasn't answered yet?","Kto jeszcze nie odpowiedział?"],
+    ["Let me explain what I want you to do next","Wyjaśnię, co macie teraz zrobić"],
+    ["The idea of this exercise is for you to…","Celem tego ćwiczenia jest, abyście…"],
+    ["Your time is up","Wasz czas minął"],
+    ["Can you all see the board?","Czy wszyscy widzicie tablicę?"],
+    ["Have you found the place?","Znaleźliście to miejsce?"],
+    ["You may go on to exercise five","Możecie przejść do ćwiczenia piątego"],
+    ["Could you pass out the worksheets?","Czy mógłbyś rozdać karty pracy?"],
+    ["Move on to the next activity","Przejdźcie do następnego ćwiczenia"],
+  ]},
+  {cat:"manage", title:"Nadzór", items:[
+    ["Stop talking","Przestańcie rozmawiać"],
+    ["Listen to what… is saying","Posłuchajcie, co mówi…"],
+    ["Leave that alone now","Zostaw to teraz w spokoju"],
+    ["Be careful","Bądźcie ostrożni / Uważajcie"],
+    ["Think well before you answer!","Dobrze się zastanów, zanim odpowiesz!"],
+    ["Do you understand my question?","Czy rozumiecie moje pytanie?"],
+  ]},
+  {cat:"manage", title:"Ustawianie młodszych dzieci", items:[
+    ["Sit on the carpet in a circle","Usiądźcie na dywanie w kręgu"],
+    ["Stand in line","Ustawcie się w rzędzie"],
+    ["Stand in line in twos","Ustawcie się w rzędzie dwójkami"],
+    ["Make room for… on the carpet","Zróbcie miejsce dla… na dywanie"],
+    ["Make a bigger circle","Zróbcie większy krąg"],
+    ["Make a smaller circle","Zróbcie mniejszy krąg"],
+    ["Leave enough space in the centre of the carpet","Zostawcie wystarczająco dużo miejsca na środku dywanu"],
+    ["Come forward one place in the line","Przesuńcie się o jedno miejsce do przodu"],
+    ["Go back one place in the line","Cofnijcie się o jedno miejsce"],
+    ["Go backwards","Idźcie do tyłu"],
+    ["Go forwards","Idźcie do przodu"],
+    ["Go to the left","Idźcie w lewo"],
+    ["Go to the right","Idźcie w prawo"],
+    ["Don't all crowd together","Nie tłoczcie się"],
+    ["Proceed in order","Przechodźcie po kolei"],
+    ["Turn half-way round","Obróćcie się do połowy"],
+    ["Stand / sit in a boy-girl order","Ustawcie się / usiądźcie na przemian chłopiec-dziewczynka"],
+    ["Don't push","Nie popychajcie się"],
+    ["Go back to your own place","Wróćcie na swoje miejsce"],
+  ]},
+
+  {cat:"explain", title:"Zwroty ogólne", items:[
+    ["Explain it in your own words","Wyjaśnij to własnymi słowami"],
+    ["It's spelled with a capital „J”","Pisze się to przez wielkie „J”"],
+    ["Can anybody correct this sentence?","Czy ktoś może poprawić to zdanie?"],
+    ["Fill in the missing words","Uzupełnijcie brakujące słowa"],
+    ["Mark the right alternative","Zaznaczcie właściwą odpowiedź"],
+  ]},
+  {cat:"explain", title:"Interakcja i emocje", items:[
+    ["That's interesting","To ciekawe"],
+    ["That's really very kind of you","To bardzo miłe z twojej strony"],
+    ["Don't worry about it","Nie przejmuj się tym"],
+    ["Why didn't you give an answer?","Dlaczego nie odpowiedziałeś?"],
+    ["I was a bit disappointed with your efforts","Byłem trochę rozczarowany twoimi staraniami"],
+  ]},
+  {cat:"explain", title:"Odwołania (reference)", items:[
+    ["After they left the USA, the soldiers…","Po opuszczeniu USA żołnierze…"],
+    ["The church was started in the last century","Budowę kościoła rozpoczęto w zeszłym stuleciu"],
+    ["This is a picture of a typically English castle","To zdjęcie typowo angielskiego zamku"],
+    ["In the background you can see…","W tle widać…"],
+    ["While we are on the subject…","Skoro już o tym mowa…"],
+    ["As I said earlier…","Jak już wcześniej mówiłem…"],
+    ["Let me sum up","Podsumuję"],
+    ["The solution is on page 44","Rozwiązanie jest na stronie 44"],
+  ]},
+  {cat:"explain", title:"Zachęcanie i wskazówki", items:[
+    ["You were almost right","Prawie miałeś rację"],
+    ["That's almost it","Prawie to"],
+    ["You're halfway there","Jesteś w połowie drogi"],
+    ["You've almost got it","Prawie ci się udało"],
+    ["You're on the right lines","Jesteś na dobrej drodze"],
+    ["There's no need to rush","Nie ma potrzeby się spieszyć"],
+    ["There's no hurry","Nie ma pośpiechu"],
+    ["We have plenty of time","Mamy mnóstwo czasu"],
+    ["Go on. Give it a try","Śmiało. Spróbuj"],
+    ["Keep trying","Próbuj dalej"],
+    ["Have a go","Spróbuj"],
+    ["Have a guess","Zgadnij"],
+    ["Look this up on the web…","Poszukaj tego w internecie…"],
+    ["Try to find the answer with the help of Google","Spróbuj znaleźć odpowiedź za pomocą Google"],
+  ]},
+
+  {cat:"correct", title:"Pozytywny feedback", items:[
+    ["There's nothing wrong with your answer","Z twoją odpowiedzią wszystko jest w porządku"],
+    ["What you said was perfectly alright","To, co powiedziałeś, było całkowicie poprawne"],
+    ["You didn't make a single mistake","Nie zrobiłeś ani jednego błędu"],
+    ["That's exactly the point","O to właśnie chodzi"],
+    ["That's just what I was looking for!","Właśnie tego szukałem!"],
+    ["You have a good pronunciation","Masz dobrą wymowę"],
+    ["You are communicating well","Dobrze się komunikujesz"],
+    ["You speak very fluently","Mówisz bardzo płynnie"],
+    ["You have made a lot of progress","Zrobiłeś duże postępy"],
+    ["You are getting better at it all the time","Coraz lepiej ci to idzie"],
+  ]},
+  {cat:"correct", title:"Wsparcie i ćwiczenie", items:[
+    ["Don't worry about your pronunciation","Nie przejmuj się swoją wymową"],
+    ["Don't worry a bit about your spelling","Ani trochę nie przejmuj się pisownią"],
+    ["Don't worry; it will improve","Nie martw się, poprawi się"],
+    ["Maybe this will help you","Może to ci pomoże"],
+    ["Do you want a clue?","Chcesz wskazówkę?"],
+    ["You still have trouble with your…","Nadal masz problem z…"],
+    ["You need some more practice with these words","Musisz jeszcze poćwiczyć te słowa"],
+    ["Practice these words at home, please","Poćwicz te słowa w domu, proszę"],
+    ["You'll have to spend some time practicing this","Będziesz musiał poświęcić trochę czasu na ćwiczenie tego"],
+  ]},
+  {cat:"correct", title:"Pochwały", items:[
+    ["Very good","Bardzo dobrze"],
+    ["Well done","Dobra robota"],
+    ["Excellent","Doskonale"],
+    ["Super","Super"],
+    ["That's nice","Ładnie / To miłe"],
+    ["Well said","Dobrze powiedziane"],
+    ["I like that","Podoba mi się to"],
+    ["Marvellous","Cudownie"],
+    ["You did a great job","Świetnie się spisałeś"],
+    ["Magnificent","Wspaniale"],
+    ["Terrific!","Rewelacyjnie!"],
+    ["Jolly good","Bardzo dobrze"],
+    ["Great stuff","Świetna robota"],
+    ["Fantastic","Fantastycznie"],
+    ["Quite right","Zupełnie słusznie"],
+    ["That's correct","To poprawne"],
+    ["Yes, you've got it","Tak, masz to / zrozumiałeś"],
+    ["You've got the idea","Załapałeś"],
+    ["It depends","To zależy"],
+    ["Bravo!","Brawo!"],
+    ["Correct!","Poprawnie!"],
+    ["Perfect!","Idealnie!"],
+    ["Great!","Świetnie!"],
+  ]},
+  {cat:"correct", title:"Częściowo lub błędnie", items:[
+    ["That's wrong, I'm afraid","Niestety to błąd"],
+    ["It might be, I suppose","Być może, przypuszczam"],
+    ["In a way, perhaps","W pewnym sensie, być może"],
+    ["Sort of, yes","Poniekąd tak"],
+    ["Not really","Niezupełnie"],
+    ["Unfortunately not","Niestety nie"],
+    ["Not exactly","Niedokładnie"],
+    ["I'm afraid that's not quite right","Obawiam się, że to niezupełnie tak"],
+    ["You can't say that, I'm afraid","Niestety tak nie można powiedzieć"],
+    ["You can't use that word here","Nie można tu użyć tego słowa"],
+    ["Good try, but not quite right","Dobra próba, ale niezupełnie"],
+    ["Have another try","Spróbuj jeszcze raz"],
+    ["Not quite right. Try again","Niezupełnie. Spróbuj jeszcze raz"],
+    ["Almost. Try again","Prawie. Spróbuj jeszcze raz"],
+  ]},
+  {cat:"correct", title:"Postępy i poprawa", items:[
+    ["That's more like it","No, już lepiej"],
+    ["That's much better","Dużo lepiej"],
+    ["That's a lot better","O wiele lepiej"],
+    ["You've improved a lot","Bardzo się poprawiłeś"],
+    ["You've improved no end","Ogromnie się poprawiłeś"],
+    ["That's it","No właśnie / Tak jest"],
+  ]},
+
+  {cat:"student", title:"Zgłaszanie problemu i prośby", items:[
+    ["I don't understand","Nie rozumiem"],
+    ["I have a problem","Mam problem"],
+    ["I can't see the board","Nie widzę tablicy"],
+    ["I don't have…","Nie mam…"],
+    ["Can I borrow…?","Czy mogę pożyczyć…?"],
+    ["Sorry, I did not hear that","Przepraszam, nie usłyszałem tego"],
+    ["Can I come in?","Czy mogę wejść?"],
+    ["I'm sorry I'm late","Przepraszam za spóźnienie"],
+    ["Can I go to the restroom?","Czy mogę wyjść do toalety?"],
+    ["Can I change seats?","Czy mogę zmienić miejsce?"],
+    ["Can you switch the lights on / off?","Czy możesz włączyć / wyłączyć światło?"],
+    ["Can I open / close the window?","Czy mogę otworzyć / zamknąć okno?"],
+    ["I'm ready","Jestem gotowy"],
+    ["Can I answer the question?","Czy mogę odpowiedzieć na pytanie?"],
+    ["Wait a minute, please","Proszę chwilę zaczekać"],
+  ]},
+  {cat:"student", title:"Prośby o powtórzenie i tempo", items:[
+    ["Can you speak louder, please?","Czy możesz mówić głośniej?"],
+    ["Can you speak more slowly, please?","Czy możesz mówić wolniej?"],
+    ["Can you repeat, please?","Czy możesz powtórzyć?"],
+    ["What page are we on?","Na której jesteśmy stronie?"],
+    ["What do we have to do now?","Co teraz mamy zrobić?"],
+    ["What is the homework?","Co jest zadane? / Jakie jest zadanie domowe?"],
+  ]},
+  {cat:"student", title:"Pytania o język i słownictwo", items:[
+    ["How do you say… in English?","Jak powiedzieć… po angielsku?"],
+    ["How do you spell…?","Jak się to literuje / pisze…?"],
+    ["What does the word… mean?","Co oznacza słowo…?"],
+    ["Can you use this word in a sentence?","Czy możesz użyć tego słowa w zdaniu?"],
+    ["What is another word for…?","Jakie jest inne słowo na…?"],
+    ["What is the difference between… and…?","Jaka jest różnica między… a…?"],
+  ]},
+  {cat:"student", title:"Prośby o wyjaśnienie i przykłady", items:[
+    ["Would you give us an example?","Czy mógłbyś podać przykład?"],
+    ["Can you explain it once more, please?","Czy możesz wyjaśnić to jeszcze raz?"],
+    ["Will you give me a clue?","Czy dasz mi wskazówkę?"],
+    ["Can you help me figure this out?","Czy możesz mi pomóc to rozgryźć?"],
+    ["I have a question about…","Mam pytanie dotyczące…"],
+    ["I don't quite understand what you mean by…","Nie do końca rozumiem, co masz na myśli, mówiąc…"],
+    ["Do we have to write this down?","Czy mamy to zapisać?"],
+    ["When is the assignment due?","Na kiedy jest to zadanie?"],
+    ["Sorry, I didn't catch the last part. Could you repeat that, please?","Przepraszam, nie zrozumiałem ostatniej części. Czy możesz to powtórzyć?"],
+    ["Excuse me, can I talk to you for a minute?","Przepraszam, czy mogę z tobą chwilę porozmawiać?"],
+    ["I can't see the board, can you step aside?","Nie widzę tablicy, czy możesz się przesunąć?"],
+  ]},
+  {cat:"student", title:"Ulubione prośby uczniów", items:[
+    ["May I sharpen my pencil?","Czy mogę zaostrzyć ołówek?"],
+    ["May I get a drink of water?","Czy mogę napić się wody?"],
+    ["I forgot…","Zapomniałem…"],
+    ["I don't remember…","Nie pamiętam…"],
+    ["I don't know","Nie wiem"],
+    ["I left the book at home","Zostawiłem książkę w domu"],
+  ]},
+
+  {cat:"group", title:"Pytanie o zdanie", items:[
+    ["What do you think about…?","Co sądzisz o…?"],
+    ["What are your thoughts on all of this?","Co o tym wszystkim myślisz?"],
+    ["How do you feel about that?","Co o tym sądzisz?"],
+    ["Do you agree?","Zgadzasz się?"],
+    ["What makes you think that?","Dlaczego tak sądzisz?"],
+  ]},
+  {cat:"group", title:"Wyrażanie opinii", items:[
+    ["In my opinion / view…","Moim zdaniem…"],
+    ["From my point of view…","Z mojego punktu widzenia…"],
+    ["If you ask me…","Według mnie…"],
+    ["As far as I'm concerned…","Jeśli o mnie chodzi…"],
+    ["It seems to me that…","Wydaje mi się, że…"],
+    ["Well, I'd say…","Cóż, powiedziałbym…"],
+  ]},
+  {cat:"group", title:"Zgadzanie się", items:[
+    ["I share your point of view","Podzielam twój punkt widzenia"],
+    ["I think / believe so, too","Ja też tak myślę"],
+    ["I have come to the same conclusion","Doszedłem do tego samego wniosku"],
+    ["I hold the same opinion","Jestem tego samego zdania"],
+    ["I have no objection whatsoever","Nie mam żadnych zastrzeżeń"],
+    ["I see it that way too","Ja też tak to widzę"],
+    ["You have a point there","Coś w tym jest"],
+  ]},
+  {cat:"group", title:"Niezgadzanie się", items:[
+    ["I see what you mean, but…","Rozumiem, o co ci chodzi, ale…"],
+    ["You may be right, but…","Możesz mieć rację, ale…"],
+    ["I respect your point but from my perspective…","Szanuję twoje zdanie, ale z mojej perspektywy…"],
+    ["I don't see it that way","Nie widzę tego tak"],
+    ["I'm not sure I agree with you on…","Nie jestem pewien, czy się z tobą zgadzam co do…"],
+  ]},
+  {cat:"group", title:"Doprecyzowywanie", items:[
+    ["Can you explain what you mean by…?","Czy możesz wyjaśnić, co masz na myśli, mówiąc…?"],
+    ["Let me put it this / another way…","Ujmę to inaczej…"],
+    ["What I actually meant was…","Tak naprawdę chodziło mi o to, że…"],
+    ["The point I'm trying to make is…","Chcę powiedzieć, że…"],
+    ["In other words, you think…","Innymi słowy, uważasz, że…"],
+    ["If I understand you correctly, your idea is…","Jeśli dobrze cię rozumiem, twój pomysł to…"],
+  ]},
+  {cat:"group", title:"Zrozumienie i relacjonowanie", items:[
+    ["I see what you mean","Rozumiem, o co ci chodzi"],
+    ["That's an interesting example","To ciekawy przykład"],
+    ["Now I understand your perspective","Teraz rozumiem twój punkt widzenia"],
+    ["My partner(s) and I discussed…","Ja i mój partner (moi partnerzy) omówiliśmy…"],
+    ["My partner(s) and I decided that / agreed on…","Ja i mój partner ustaliliśmy / zgodziliśmy się, że…"],
+    ["One example my partner offered was…","Jednym z przykładów podanych przez partnera było…"],
+  ]},
+
+  {cat:"online", title:"Problemy techniczne", items:[
+    ["I can't hear you. You're on mute","Nie słyszę cię. Masz wyciszony mikrofon"],
+    ["I'm sorry, you're breaking up. Could you say that one more time?","Przepraszam, urywa ci się. Czy możesz to powtórzyć?"],
+    ["The connection is bad. Can you say that again?","Połączenie jest słabe. Możesz powtórzyć?"],
+    ["The link is not working","Link nie działa"],
+    ["Could you resend the link, please?","Czy możesz wysłać link jeszcze raz?"],
+    ["I can't see your screen / the presentation","Nie widzę twojego ekranu / prezentacji"],
+    ["Sorry, my internet is really slow today","Przepraszam, mam dziś bardzo wolny internet"],
+    ["Can you hear / see me now?","Czy teraz mnie słyszysz / widzisz?"],
+    ["How is that? Any better?","I jak teraz? Lepiej?"],
+    ["Sorry, I'm having a sound issue","Przepraszam, mam problem z dźwiękiem"],
+    ["I need to turn my camera / mic off for a moment, I'll be right back","Muszę na chwilę wyłączyć kamerę / mikrofon, zaraz wracam"],
+  ]},
+  {cat:"online", title:"Odpowiadanie i zgadywanie", items:[
+    ["May I have some time to think?","Czy mogę się chwilę zastanowić?"],
+    ["Is this correct?","Czy to poprawne?"],
+    ["I'm not sure, but can I guess?","Nie jestem pewien, ale czy mogę zgadywać?"],
+  ]},
+
+  {cat:"discipline", title:"Uciszanie i porządek", items:[
+    ["Quiet! / Silence!","Cisza!"],
+    ["That's enough!","Wystarczy!"],
+    ["No talking","Nie rozmawiać"],
+    ["Listen","Słuchajcie"],
+    ["One at a time, please","Po kolei, proszę"],
+    ["Stop talking to…","Przestań rozmawiać z…"],
+    ["Distribute these sheets","Rozdajcie te kartki"],
+    ["Collect the test","Zbierzcie testy"],
+    ["Collect your work, please","Zbierzcie swoje prace, proszę"],
+    ["Put a sock in it!","Cisza! / Zamknij się! (potocznie)"],
+    ["Now hang on!","No zaczekaj!"],
+    ["Mind your language!","Uważaj, jak się wyrażasz!"],
+  ]},
+  {cat:"discipline", title:"Kierowanie klasą", items:[
+    ["All together now","A teraz wszyscy razem"],
+    ["The whole class, please","Cała klasa, proszę"],
+    ["I want you all to join in","Chcę, żebyście wszyscy się włączyli"],
+    ["Would you mind switching the lights on?","Czy mógłbyś włączyć światło?"],
+    ["It might be an idea to leave this till next time","Może lepiej zostawmy to na następny raz"],
+    ["Where's…?","Gdzie jest…?"],
+    ["Tell me where… is","Powiedz mi, gdzie jest…"],
+    ["What do you think?","Co myślisz?"],
+    ["How can you tell?","Skąd wiesz? / Po czym to poznajesz?"],
+    ["Faster / More quickly","Szybciej"],
+    ["Read quietly","Czytajcie po cichu"],
+    ["Read aloud","Czytajcie na głos"],
+    ["Louder","Głośniej"],
+    ["Go back to your seat","Wróć na swoje miejsce"],
+    ["Line up here","Ustawcie się tutaj"],
+  ]},
+
+  {cat:"social", title:"Okazje i życzenia", items:[
+    ["… has his / her 12th birthday today","… ma dziś 12. urodziny"],
+    ["… is eleven today. Let's sing „Happy Birthday”","… kończy dziś jedenaście lat. Zaśpiewajmy „Happy Birthday”"],
+    ["I hope you all have a good Christmas","Życzę wam wszystkim wesołych świąt Bożego Narodzenia"],
+    ["Happy New Year!","Szczęśliwego Nowego Roku!"],
+    ["All the best for the New Year","Wszystkiego najlepszego w Nowym Roku"],
+    ["Happy Easter","Wesołych Świąt Wielkanocnych"],
+    ["Best of luck","Powodzenia"],
+    ["Good luck","Powodzenia"],
+    ["I hope you pass","Mam nadzieję, że zdasz"],
+    ["Hard lines!","A to pech!"],
+    ["Never mind","Nic nie szkodzi / Nieważne"],
+    ["Better luck next time","Więcej szczęścia następnym razem"],
+    ["Happy birthday!","Wszystkiego najlepszego z okazji urodzin!"],
+    ["Many happy returns!","Wszystkiego najlepszego (w dniu urodzin)!"],
+    ["Congratulations!","Gratulacje!"],
+    ["Merry Christmas!","Wesołych Świąt Bożego Narodzenia!"],
+    ["Have a nice weekend!","Miłego weekendu!"],
+  ]},
+  {cat:"social", title:"Samopoczucie i przepraszanie", items:[
+    ["Have you been ill?","Chorowałeś?"],
+    ["What was the matter?","Co ci dolegało? / Co się stało?"],
+    ["I'm sorry (about that)","Przepraszam (za to)"],
+    ["Sorry, that was my fault","Przepraszam, to moja wina"],
+    ["I'm terribly sorry","Bardzo mi przykro"],
+    ["I'm afraid I can't speak any louder","Niestety nie mogę mówić głośniej"],
+    ["I seem to be losing my voice","Chyba tracę głos"],
+    ["I have a sore throat","Boli mnie gardło"],
+    ["I have a headache","Boli mnie głowa"],
+    ["I'm feeling under the weather","Czuję się niezbyt dobrze"],
+  ]},
+  {cat:"social", title:"Poruszanie się i przechodzenie", items:[
+    ["Excuse me for a moment","Przepraszam na chwilę"],
+    ["I'll be back in a moment","Zaraz wrócę"],
+    ["Carry on with the exercise while I'm away","Kontynuujcie ćwiczenie pod moją nieobecność"],
+    ["I've got to go next door for a moment","Muszę na chwilę wyjść do sąsiedniej sali"],
+    ["Excuse me","Przepraszam"],
+    ["Could I get past, please?","Czy mogę przejść?"],
+    ["You're blocking the way","Blokujesz przejście"],
+    ["I can't get past you","Nie mogę cię wyminąć"],
+    ["Get out of the way, please","Zejdź z drogi, proszę"],
+    ["Do you mind if I sit down?","Czy nie masz nic przeciwko, żebym usiadł?"],
+  ]},
+  {cat:"social", title:"Grzeczność i powitania", items:[
+    ["Good morning","Dzień dobry"],
+    ["Cheerio now","Na razie / Do zobaczenia"],
+    ["God bless!","Szczęść Boże! / Niech Bóg błogosławi!"],
+    ["Thanks for your help","Dziękuję za pomoc"],
+    ["Until tomorrow","Do jutra"],
+    ["Please","Proszę"],
+    ["Thank you","Dziękuję"],
+    ["You're welcome","Proszę bardzo / Nie ma za co"],
+    ["I beg your pardon","Przepraszam / Słucham?"],
+    ["What's your name?","Jak masz na imię?"],
+    ["What's this?","Co to jest?"],
+    ["Present / Absent","Obecny / Nieobecny"],
+    ["He / She is ill","On / Ona jest chory / chora"],
+  ]},
+  {cat:"social", title:"Polecenia porządkowe", items:[
+    ["Close the door","Zamknij drzwi"],
+    ["Open the door / window","Otwórz drzwi / okno"],
+    ["Erase the blackboard","Zetrzyj tablicę"],
+    ["Switch on / off the lights","Włącz / wyłącz światło"],
+  ]},
+];
+
+/* ============================================================
    STAN + STORAGE
    ============================================================ */
 const LS = {
@@ -5114,9 +5773,79 @@ function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show"
 function refresh(){renderPills();fillFilterOptions();render();renderPlan()}
 
 /* ============================================================
+   ZWROTY NA LEKCJI — render + wymowa
+   ============================================================ */
+let activeMain="games";
+let activePhraseCat="all";
+const escHtml=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const escAttr=s=>escHtml(s).replace(/"/g,"&quot;");
+
+function phraseCatById(id){return PHRASE_CATS.find(c=>c.id===id)||{name:"Inne",emoji:"💬"}}
+
+function renderPhraseCats(){
+  const counts={};
+  PHRASES.forEach(g=>counts[g.cat]=(counts[g.cat]||0)+g.items.length);
+  let html=`<span class="pill ${activePhraseCat==='all'?'active':''}" data-pcat="all">🌈 Wszystkie</span>`;
+  PHRASE_CATS.forEach(c=>{
+    if(!counts[c.id])return;
+    html+=`<span class="pill ${activePhraseCat===c.id?'active':''}" data-pcat="${c.id}">${c.emoji} ${c.name} <b style="opacity:.6">${counts[c.id]}</b></span>`;
+  });
+  $("#phraseCats").innerHTML=html;
+  $$("[data-pcat]").forEach(p=>p.onclick=()=>{activePhraseCat=p.dataset.pcat;renderPhraseCats();renderPhrases();});
+}
+
+function renderPhrases(){
+  const q=$("#search").value.trim().toLowerCase();
+  let html="",shown=0;
+  PHRASES.forEach(g=>{
+    if(activePhraseCat!=="all" && g.cat!==activePhraseCat) return;
+    const items=g.items.filter(([en,pl])=> !q || en.toLowerCase().includes(q) || pl.toLowerCase().includes(q));
+    if(!items.length) return;
+    shown+=items.length;
+    const c=phraseCatById(g.cat);
+    html+=`<div class="phrase-group"><div class="phrase-head"><span class="pe">${c.emoji}</span><h3>${escHtml(g.title)}</h3><span class="cnt">${items.length}</span></div>`;
+    items.forEach(([en,pl])=>{
+      html+=`<div class="phrase-row"><div class="en">${escHtml(en)}</div><div class="pl">${escHtml(pl)}</div>`+
+            `<div class="acts"><button class="pbtn" data-say="${escAttr(en)}" title="Wymów">🔊</button>`+
+            `<button class="pbtn" data-copy="${escAttr(en)}" title="Kopiuj">📋</button></div></div>`;
+    });
+    html+=`</div>`;
+  });
+  $("#phraseList").innerHTML = shown ? html :
+    `<div class="phrase-empty"><div style="font-size:48px">🔎</div><h3>Brak zwrotów</h3><p>Zmień kategorię lub wyszukaj inne słowo.</p></div>`;
+  $$("[data-say]").forEach(b=>b.onclick=()=>speak(b.dataset.say));
+  $$("[data-copy]").forEach(b=>b.onclick=()=>{
+    if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(b.dataset.copy);
+    toast("📋 Skopiowano");
+  });
+}
+
+function speak(text){
+  if(!("speechSynthesis" in window)){toast("Przeglądarka nie wspiera odczytu");return}
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text.replace(/…/g,""));
+  u.lang="en-GB"; u.rate=0.9;
+  window.speechSynthesis.speak(u);
+}
+
+function switchMain(m){
+  activeMain=m;
+  $$(".main-tabs .mtab").forEach(b=>b.classList.toggle("active",b.dataset.main===m));
+  $("#gamesView").style.display = m==="games"?"":"none";
+  $("#phrasesView").style.display = m==="phrases"?"":"none";
+  $(".searchbar .stat-chips").style.display = m==="games"?"":"none";
+  $("#planFab").style.display = m==="games"?"":"none";
+  $("#search").placeholder = m==="games"
+    ? "Szukaj zabawy, słowa kluczowego, umiejętności… (np. flashcards, mówienie, rozgrzewka)"
+    : "Szukaj zwrotu po polsku lub angielsku… (np. homework, cisza, do widzenia)";
+  if(m==="games") render(); else renderPhrases();
+}
+
+/* ============================================================
    EVENTY GŁÓWNE
    ============================================================ */
-$("#search").addEventListener("input",render);
+$("#search").addEventListener("input",()=>{ activeMain==="games"?render():renderPhrases(); });
+$$(".main-tabs .mtab").forEach(b=>b.onclick=()=>switchMain(b.dataset.main));
 $$('[data-role]').forEach(s=>s.onchange=render);
 $("#sortBy").onchange=render;
 $$(".view-tabs button").forEach(b=>b.onclick=()=>{
@@ -5246,6 +5975,7 @@ document.addEventListener("keydown",e=>{
   document.documentElement.setAttribute("data-theme",t);
   $("#themeBtn").textContent=t==="dark"?"☀️":"🌙";
   refresh();
+  renderPhraseCats(); // przygotuj zakładkę ze zwrotami
   openSharedFromHash(); // jeśli otwarto link do udostępnionej zabawy
 })();
 </script>
