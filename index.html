@@ -2,8 +2,31 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Language Teacher's Toolbox — Zabawy, gry i metody aktywizujące</title>
+<!-- ===== PWA: instalacja + offline ===== -->
+<link rel="manifest" href="manifest.webmanifest" />
+<meta name="theme-color" content="#6c5ce7" />
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Teach-M" />
+<script>
+  window.__pwa = { prompt: null };
+  window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault();
+    window.__pwa.prompt = e;
+    var b = document.getElementById("installBtn");
+    if (b) b.style.display = "";
+  });
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").catch(function () {});
+    });
+  }
+</script>
 <style>
   :root{
     --bg:#f4f6fb;
@@ -436,6 +459,7 @@
         </div>
       </div>
       <div class="hero-actions">
+        <button class="icon-btn solid" id="installBtn" style="display:none">📲 Zainstaluj</button>
         <button class="icon-btn" id="warmupBtn">🎲 Losowe</button>
         <button class="icon-btn" id="toolsBtn">🧰 Narzędzia</button>
         <button class="icon-btn" id="timerBtn">⏱️ Timer</button>
@@ -7249,6 +7273,20 @@ function openTool(t){
    ============================================================ */
 $("#search").addEventListener("input",renderActiveMain);
 $$(".main-tabs .mtab").forEach(b=>b.onclick=()=>switchMain(b.dataset.main));
+
+/* PWA — instalacja */
+(function(){
+  const ib=$("#installBtn");if(!ib)return;
+  if(window.__pwa&&window.__pwa.prompt)ib.style.display="";
+  if(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)ib.style.display="none";
+  ib.onclick=async()=>{
+    const p=window.__pwa&&window.__pwa.prompt;
+    if(!p){toast("Użyj menu przeglądarki → „Dodaj do ekranu głównego”");return}
+    p.prompt();try{await p.userChoice}catch(e){}
+    window.__pwa.prompt=null;ib.style.display="none";
+  };
+  window.addEventListener("appinstalled",()=>{ib.style.display="none";toast("✅ Zainstalowano aplikację")});
+})();
 
 /* Narzędzia */
 $("#toolsBtn").onclick=()=>openOverlay("tools");
